@@ -10,8 +10,25 @@ const options = {
         },
         servers: [
             {
-                url: 'http://localhost:3000',
-                description: 'Local development server'
+                url: process.env.API_URL || 'http://localhost:3000',
+                description: process.env.NODE_ENV === 'production'
+                    ? 'Production server'
+                    : 'Local development server'
+            }
+        ],
+        components: {
+            securitySchemes: {
+                bearerAuth: {
+                    type: 'http',
+                    scheme: 'bearer',
+                    bearerFormat: 'JWT',
+                    description: 'Enter your JWT token'
+                }
+            }
+        },
+        security: [
+            {
+                bearerAuth: []
             }
         ],
         tags: [

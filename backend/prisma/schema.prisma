@@ -1,0 +1,161 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+}
+
+/// CHECK: role IN ('Administrator', 'Dokter', 'Petugas Pendaftaran')
+model User {
+    id           BigInt   @id @default(autoincrement())
+    email        String   @unique @db.VarChar(100)
+    passwordHash String   @map("password_hash") @db.VarChar(255)
+    role         String   @db.VarChar(30)
+    createdAt    DateTime @default(now()) @map("created_at")
+    updatedAt    DateTime @default(now()) @updatedAt @map("updated_at")
+
+    doctor               Doctor?
+    createdMedicalRecords MedicalRecord[] @relation("CreatedBy")
+    updatedMedicalRecords MedicalRecord[] @relation("UpdatedBy")
+
+    @@map("users")
+}
+
+model Patient {
+    id                  BigInt   @id @default(autoincrement())
+    medicalRecordNumber String   @unique @map("medical_record_number") @db.VarChar(20)
+    nik                 String   @unique @db.VarChar(16)
+    name                String   @db.VarChar(100)
+    gender              String   @db.VarChar(20)
+    dateOfBirth         DateTime @map("date_of_birth") @db.Date
+    phone               String?  @db.VarChar(20)
+    address             String?
+    createdAt           DateTime @default(now()) @map("created_at")
+    updatedAt           DateTime @default(now()) @updatedAt @map("updated_at")
+
+    registrations Registration[]
+
+    @@map("patients")
+}
+
+model Polyclinic {
+    id          BigInt   @id @default(autoincrement())
+    name        String   @db.VarChar(100)
+    description String?
+    createdAt   DateTime @default(now()) @map("created_at")
+    updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
+
+    registrations Registration[]
+
+    @@map("polyclinics")
+}
+
+model Doctor {
+    id             BigInt   @id @default(autoincrement())
+    userId         BigInt   @unique @map("user_id")
+    doctorCode     String   @unique @map("doctor_code") @db.VarChar(20)
+    name           String   @db.VarChar(100)
+    phone          String?  @db.VarChar(20)
+    specialization String?  @db.VarChar(100)
+    createdAt      DateTime @default(now()) @map("created_at")
+    updatedAt      DateTime @default(now()) @updatedAt @map("updated_at")
+
+    user          User           @relation(fields: [userId], references: [id])
+    registrations Registration[]
+
+    @@map("doctors")
+}
+
+/// CHECK: regist_status IN ('Menunggu', 'Check In', 'Pemeriksaan', 'Selesai')
+model Registration {
+    id               BigInt   @id @default(autoincrement())
+    patientId        BigInt   @map("patient_id")
+    doctorId         BigInt   @map("doctor_id")
+    polyId           BigInt   @map("poly_id")
+    visitDate        DateTime @map("visit_date") @db.Date
+    paymentType      String   @map("payment_type") @db.VarChar(50)
+    initialComplaint String?  @map("initial_complaint")
+    registStatus     String   @default("Menunggu") @map("regist_status") @db.VarChar(20)
+    createdAt        DateTime @default(now()) @map("created_at")
+    updatedAt        DateTime @default(now()) @updatedAt @map("updated_at")
+
+    patient       Patient        @relation(fields: [patientId], references: [id])
+    doctor        Doctor         @relation(fields: [doctorId], references: [id])
+    polyclinic    Polyclinic     @relation(fields: [polyId], references: [id])
+    patientQueue  PatientQueue?
+    medicalRecord MedicalRecord?
+
+    @@map("registrations")
+}
+
+/// CHECK: queue_status IN ('Menunggu', 'Dipanggil', 'Selesai')
+model PatientQueue {
+    id             BigInt    @id @default(autoincrement())
+    registrationId BigInt    @unique @map("registration_id")
+    queueNumber    String    @map("queue_number") @db.VarChar(20)
+    queueStatus    String    @default("Menunggu") @map("queue_status") @db.VarChar(20)
+    calledAt       DateTime? @map("called_at")
+    createdAt      DateTime  @default(now()) @map("created_at")
+    updatedAt      DateTime  @default(now()) @updatedAt @map("updated_at")
+
+    registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+
+    @@map("patient_queues")
+}
+
+model MedicalRecord {
+    id             BigInt    @id @default(autoincrement())
+    registrationId BigInt    @unique @map("registration_id")
+    subjective     String?
+    bloodPressure  String?   @map("blood_pressure") @db.VarChar(20)
+    temperature    Decimal?  @db.Decimal(5, 2)
+    weight         Decimal?  @db.Decimal(5, 2)
+    height         Decimal?  @db.Decimal(5, 2)
+    assessment     String?
+    plan           String?
+    medicalAction  String?   @map("medical_action")
+    examinedAt     DateTime? @map("examined_at")
+    createdAt      DateTime  @default(now()) @map("created_at")
+    createdBy      BigInt?   @map("created_by")
+    updatedAt      DateTime  @default(now()) @updatedAt @map("updated_at")
+    updatedBy      BigInt?   @map("updated_by")
+
+    registration  Registration  @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+    createdByUser User?         @relation("CreatedBy", fields: [createdBy], references: [id])
+    updatedByUser User?         @relation("UpdatedBy", fields: [updatedBy], references: [id])
+    prescriptions Prescription[]
+
+    @@map("medical_records")
+}
+
+model Prescription {
+    id               BigInt   @id @default(autoincrement())
+    medicalRecordId  BigInt   @map("medical_record_id")
+    prescriptionDate DateTime @default(now()) @map("prescription_date")
+    notes            String?
+    createdAt        DateTime @default(now()) @map("created_at")
+    updatedAt        DateTime @default(now()) @updatedAt @map("updated_at")
+
+    medicalRecord     MedicalRecord      @relation(fields: [medicalRecordId], references: [id], onDelete: Cascade)
+    prescriptionItems PrescriptionItem[]
+
+    @@map("prescriptions")
+}
+
+model PrescriptionItem {
+    id             BigInt  @id @default(autoincrement())
+    prescriptionId BigInt  @map("prescription_id")
+    medicineName   String  @map("medicine_name") @db.VarChar(100)
+    dosage         String? @db.VarChar(50)
+    frequency      String? @db.VarChar(50)
+    quantity       Int?
+    instructions   String?
+
+    prescription Prescription @relation(fields: [prescriptionId], references: [id], onDelete: Cascade)
+
+    @@map("prescription_items")
+}
