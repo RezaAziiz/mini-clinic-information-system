@@ -1,51 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
 import api from '../services/api';
 import toast from 'react-hot-toast';
+import { formatDate } from '../utils/formatters';
+import Backdrop from '../components/common/Backdrop';
 import { useAuth } from '../contexts/AuthContext';
-import {
-    Plus, X, Filter, Calendar, Loader2,
-    ListOrdered, PhoneCall, CheckCircle2, Clock,
-    User, Building2, Stethoscope, Hash
-} from 'lucide-react';
-
-// ─── Shared UI helpers ────────────────────────────────────────────────────────
-
-const Backdrop = ({ children, onClose }) => (
-    <div
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
-        onClick={onClose}
-    >
-        <div onClick={(e) => e.stopPropagation()} className="w-full">
-            {children}
-        </div>
-    </div>
-);
-
-const QUEUE_STATUS_STYLES = {
-    Menunggu:   'bg-yellow-50 text-yellow-700',
-    Dipanggil:  'bg-blue-50  text-blue-700',
-    Selesai:    'bg-green-50 text-green-700',
-};
-
-const StatusBadge = ({ status }) => (
-    <span className={`text-[10px] font-bold px-2.5 py-1 rounded-md ${QUEUE_STATUS_STYLES[status] || 'bg-slate-100 text-slate-600'}`}>
-        {status}
-    </span>
-);
+import { Plus, X, Filter, Calendar, Loader2, Stethoscope } from 'lucide-react';
+import QueueTable from '../components/queue/QueueTable';
+import QueueCreateModal from '../components/queue/QueueCreateModal';
 
 const todayISO = () => new Date().toISOString().split('T')[0];
-
-const formatTime = (dateStr) => {
-    if (!dateStr) return '-';
-    return new Date(dateStr).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-};
-
-const formatDate = (dateStr) => {
-    if (!dateStr) return '-';
-    return new Date(dateStr).toLocaleDateString('id-ID', {
-        day: '2-digit', month: 'short', year: 'numeric',
-    });
-};
 
 const STATUSES = ['Menunggu', 'Dipanggil', 'Selesai'];
 
@@ -339,235 +302,25 @@ const QueueManagement = () => {
             </div>
 
             {/* ── Table ── */}
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-                <div className="overflow-x-auto">
-                    <table className="w-full text-left">
-                        <thead>
-                            <tr className="bg-slate-50/80">
-                                <th className="px-5 py-3.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">No. Antrean</th>
-                                <th className="px-5 py-3.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Pasien</th>
-                                <th className="px-5 py-3.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Poli / Dokter</th>
-                                <th className="px-5 py-3.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Status</th>
-                                <th className="px-5 py-3.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Dipanggil Pukul</th>
-                                <th className="px-5 py-3.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider text-center">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-50">
-                            {loading ? (
-                                <tr>
-                                    <td colSpan="6" className="py-16 text-center">
-                                        <Loader2 className="w-6 h-6 text-primary-500 animate-spin mx-auto mb-2" />
-                                        <p className="text-xs font-medium text-slate-400">Memuat data antrean...</p>
-                                    </td>
-                                </tr>
-                            ) : queues.length === 0 ? (
-                                <tr>
-                                    <td colSpan="6" className="py-16 text-center">
-                                        <ListOrdered className="w-10 h-10 text-slate-200 mx-auto mb-3" />
-                                        <p className="text-sm font-bold text-slate-400">Tidak ada data antrean</p>
-                                        <p className="text-xs text-slate-400 mt-1">
-                                            Coba ubah filter tanggal / status, atau generate antrean baru
-                                        </p>
-                                    </td>
-                                </tr>
-                            ) : (
-                                queues.map((queue) => (
-                                    <tr key={queue.id} className="hover:bg-slate-50/50 transition-colors">
-                                        {/* Queue number */}
-                                        <td className="px-5 py-4">
-                                            <span className={`text-xl font-black tracking-tight ${
-                                                queue.queueStatus === 'Selesai'
-                                                    ? 'text-slate-300'
-                                                    : 'text-primary-600'
-                                            }`}>
-                                                {queue.queueNumber}
-                                            </span>
-                                        </td>
-
-                                        {/* Patient */}
-                                        <td className="px-5 py-4">
-                                            <p className="text-sm font-bold text-slate-700">
-                                                {queue.registration?.patient?.name}
-                                            </p>
-                                            <p className="text-[10px] font-semibold text-primary-600">
-                                                {queue.registration?.patient?.medicalRecordNumber}
-                                            </p>
-                                        </td>
-
-                                        {/* Poli / Doctor */}
-                                        <td className="px-5 py-4">
-                                            <p className="text-sm font-semibold text-slate-700">
-                                                {queue.registration?.polyclinic?.name}
-                                            </p>
-                                            <p className="text-[10px] font-medium text-slate-400">
-                                                {queue.registration?.doctor?.name}
-                                            </p>
-                                        </td>
-
-                                        {/* Status */}
-                                        <td className="px-5 py-4">
-                                            <StatusBadge status={queue.queueStatus} />
-                                        </td>
-
-                                        {/* Called at */}
-                                        <td className="px-5 py-4">
-                                            {queue.calledAt ? (
-                                                <div>
-                                                    <p className="text-xs font-semibold text-slate-600">{formatTime(queue.calledAt)}</p>
-                                                    <p className="text-[10px] text-slate-400">{formatDate(queue.calledAt)}</p>
-                                                </div>
-                                            ) : (
-                                                <span className="text-xs text-slate-300">—</span>
-                                            )}
-                                        </td>
-
-                                        {/* Actions */}
-                                        <td className="px-5 py-4">
-                                            <div className="flex items-center justify-center gap-2">
-                                                {queue.queueStatus === 'Menunggu' && (
-                                                    <button
-                                                        onClick={() => handleCall(queue)}
-                                                        disabled={actionLoading[queue.id]}
-                                                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-600 text-white hover:bg-blue-700 transition-all disabled:opacity-50 shadow-sm shadow-blue-600/25"
-                                                    >
-                                                        {actionLoading[queue.id]
-                                                            ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                                                            : <PhoneCall className="w-3.5 h-3.5" />
-                                                        }
-                                                        Panggil
-                                                    </button>
-                                                )}
-
-                                                {queue.queueStatus === 'Dipanggil' && (
-                                                    <button
-                                                        onClick={() => handleFinish(queue)}
-                                                        disabled={actionLoading[queue.id]}
-                                                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-green-600 text-white hover:bg-green-700 transition-all disabled:opacity-50 shadow-sm shadow-green-600/25"
-                                                    >
-                                                        {actionLoading[queue.id]
-                                                            ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                                                            : <CheckCircle2 className="w-3.5 h-3.5" />
-                                                        }
-                                                        Selesaikan
-                                                    </button>
-                                                )}
-
-                                                {queue.queueStatus === 'Selesai' && (
-                                                    <span className="text-xs font-semibold text-slate-300">Selesai</span>
-                                                )}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))
-                            )}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            <QueueTable
+                queues={queues}
+                loading={loading}
+                actionLoading={actionLoading}
+                handleCall={handleCall}
+                handleFinish={handleFinish}
+            />
 
             {/* ====== CREATE QUEUE MODAL (Petugas only) ====== */}
-            {showCreateModal && (
-                <Backdrop onClose={() => setShowCreateModal(false)}>
-                    <div className="max-w-md mx-auto bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden max-h-[88vh] flex flex-col">
-                        {/* Header */}
-                        <div className="px-5 py-4 border-b border-slate-100 flex justify-between items-center shrink-0">
-                            <div>
-                                <h3 className="text-lg font-bold text-slate-800">Generate Nomor Antrean</h3>
-                                <p className="text-xs text-slate-500 font-medium mt-0.5">
-                                    Pilih pendaftaran (status Check In) untuk digenerate antreannya
-                                </p>
-                            </div>
-                            <button
-                                onClick={() => setShowCreateModal(false)}
-                                className="p-2 rounded-lg hover:bg-slate-100 text-slate-400 transition-colors"
-                            >
-                                <X className="w-5 h-5" />
-                            </button>
-                        </div>
-
-                        {/* Body */}
-                        <div className="flex-1 overflow-y-auto p-5">
-                            {loadingRegs ? (
-                                <div className="py-10 text-center">
-                                    <Loader2 className="w-6 h-6 text-primary-500 animate-spin mx-auto mb-2" />
-                                    <p className="text-xs text-slate-400">Memuat daftar pendaftaran...</p>
-                                </div>
-                            ) : checkInRegs.length === 0 ? (
-                                <div className="py-10 text-center">
-                                    <Clock className="w-10 h-10 text-slate-200 mx-auto mb-3" />
-                                    <p className="text-sm font-bold text-slate-400">Tidak ada pendaftaran Check In</p>
-                                    <p className="text-xs text-slate-400 mt-1">
-                                        Semua pasien sudah memiliki antrean, atau belum ada yang Check In pada tanggal ini
-                                    </p>
-                                </div>
-                            ) : (
-                                <div className="space-y-2">
-                                    {checkInRegs.map((reg) => (
-                                        <button
-                                            key={reg.id}
-                                            type="button"
-                                            onClick={() => setSelectedRegId(String(reg.id))}
-                                            className={`w-full text-left p-3.5 rounded-xl border-2 transition-all ${
-                                                selectedRegId === String(reg.id)
-                                                    ? 'border-primary-400 bg-primary-50'
-                                                    : 'border-slate-100 bg-slate-50 hover:border-slate-300'
-                                            }`}
-                                        >
-                                            <div className="flex items-start justify-between gap-3">
-                                                <div className="flex-1 min-w-0">
-                                                    <div className="flex items-center gap-2 mb-1.5">
-                                                        <User className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                                                        <p className="text-sm font-bold text-slate-700 truncate">
-                                                            {reg.patient?.name}
-                                                        </p>
-                                                    </div>
-                                                    <p className="text-[10px] font-semibold text-primary-600 mb-1.5">
-                                                        {reg.patient?.medicalRecordNumber}
-                                                    </p>
-                                                    <div className="flex items-center gap-3 text-[10px] text-slate-400">
-                                                        <span className="flex items-center gap-1">
-                                                            <Building2 className="w-3 h-3" />
-                                                            {reg.polyclinic?.name}
-                                                        </span>
-                                                        <span className="flex items-center gap-1">
-                                                            <Stethoscope className="w-3 h-3" />
-                                                            {reg.doctor?.name}
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                {selectedRegId === String(reg.id) && (
-                                                    <CheckCircle2 className="w-5 h-5 text-primary-600 shrink-0 mt-0.5" />
-                                                )}
-                                            </div>
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Footer */}
-                        <div className="px-5 pb-5 pt-3 flex gap-3 shrink-0 border-t border-slate-100">
-                            <button
-                                onClick={() => setShowCreateModal(false)}
-                                className="flex-1 py-2.5 rounded-xl text-sm font-semibold border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all"
-                            >
-                                Batal
-                            </button>
-                            <button
-                                onClick={handleCreateQueue}
-                                disabled={submitting || !selectedRegId || checkInRegs.length === 0}
-                                className="flex-1 py-2.5 rounded-xl text-sm font-semibold bg-primary-600 text-white hover:bg-primary-700 shadow-lg shadow-primary-600/25 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
-                            >
-                                {submitting
-                                    ? <Loader2 className="w-4 h-4 animate-spin" />
-                                    : <Hash className="w-4 h-4" />
-                                }
-                                Generate Antrean
-                            </button>
-                        </div>
-                    </div>
-                </Backdrop>
-            )}
+            <QueueCreateModal
+                show={showCreateModal}
+                onClose={() => setShowCreateModal(false)}
+                loadingRegs={loadingRegs}
+                checkInRegs={checkInRegs}
+                selectedRegId={selectedRegId}
+                setSelectedRegId={setSelectedRegId}
+                handleCreateQueue={handleCreateQueue}
+                submitting={submitting}
+            />
         </div>
     );
 };

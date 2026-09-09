@@ -1,5 +1,5 @@
 // Fix for "TypeError: Do not know how to serialize a BigInt" from Prisma
-BigInt.prototype.toJSON = function() { return this.toString() }
+BigInt.prototype.toJSON = function () { return this.toString() }
 
 import express from 'express';
 import cors from 'cors';
@@ -31,6 +31,9 @@ app.use(responseFormatter);
 
 // Swagger documentation
 if (process.env.NODE_ENV !== 'production') {
+    app.get('/api-docs.json', (req, res) => {
+        res.json(swaggerSpec);
+    });
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 }
 
