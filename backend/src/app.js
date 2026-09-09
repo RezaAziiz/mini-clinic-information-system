@@ -6,6 +6,7 @@ import swaggerSpec from './config/swagger.js';
 import { responseFormatter } from './middlewares/response.middleware.js';
 import errorHandler from './middlewares/error.middleware.js';
 import authRoutes from './modules/auth/auth.route.js';
+import patientRoutes from './modules/patients/patient.route.js';
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.get('/health', (req, res) => {
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/patients', patientRoutes);
 
 // Global error handler
 app.use(errorHandler);

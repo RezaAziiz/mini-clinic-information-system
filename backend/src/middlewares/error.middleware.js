@@ -1,16 +1,48 @@
+import { Prisma } from '@prisma/client';
 import { ApiError } from '../common/utils/ApiError.js';
 
 const errorHandler = (err, req, res, _next) => {
-    // Jika error sudah dari ApiError gunakan formatter
+    // Jika error sudah dari ApiError, gunakan format
     if (err instanceof ApiError) {
         return res.status(err.statusCode).json({
             success: false,
             message: err.message,
-            ...(err.errors.length > 0 && { errors: err.errors })// array errors jika ada (utk validasi)
+            ...(err.errors && err.errors.length > 0 && { errors: err.errors })
         });
     }
 
-    // Jika error dari library (prisma/jwt) atau runtime, jadikan 500
+    // Mapping Error Prisma
+    if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        // P2002: Unique constraint failed
+        if (err.code === 'P2002') {
+            const field = err.meta?.target || 'Data';
+            return res.status(409).json({
+                success: false,
+                message: `${field} sudah terdaftar atau tidak boleh duplikat`,
+                data: null
+            });
+        }
+
+        // P2003: Foreign key constraint failed
+        if (err.code === 'P2003') {
+            return res.status(400).json({
+                success: false,
+                message: 'Data tidak dapat dihapus atau diubah karena masih berelasi dengan data lain',
+                data: null
+            });
+        }
+
+        // P2025: Record to update/delete not found
+        if (err.code === 'P2025') {
+            return res.status(404).json({
+                success: false,
+                message: 'Data tidak ditemukan',
+                data: null
+            });
+        }
+    }
+
+    // Jika error dari library lain atau runtime, jadikan 500
     console.error(' [Unhandled Error]:', err);
 
     return res.status(500).json({

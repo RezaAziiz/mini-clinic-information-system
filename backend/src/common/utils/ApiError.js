@@ -22,7 +22,7 @@ export class ApiError extends Error {
         return new ApiError(404, message);
     }
 
-    static conflict(message = 'Terjadi konflik pada resource') {
+    static conflict(message = 'Terjadi konflik data') {
         return new ApiError(409, message);
     }
 
