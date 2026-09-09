@@ -9,33 +9,72 @@ datasource db {
     provider = "postgresql"
 }
 
-/// CHECK: role IN ('Administrator', 'Dokter', 'Petugas Pendaftaran')
+enum UserRole {
+  Administrator
+  Dokter
+  Petugas_Pendaftaran @map("Petugas Pendaftaran")
+
+  @@map("user_role")
+}
+
+enum GenderType {
+  L
+  P
+
+  @@map("gender_type")
+}
+
+enum PaymentType {
+  Umum
+  BPJS
+  Asuransi_Lainnya @map("Asuransi Lainnya")
+
+  @@map("payment_type")
+}
+
+enum RegistStatus {
+  Menunggu
+  Check_In    @map("Check In")
+  Pemeriksaan
+  Selesai
+
+  @@map("regist_status")
+}
+
+enum QueueStatus {
+  Menunggu
+  Dipanggil
+  Selesai
+
+  @@map("queue_status")
+}
+
 model User {
-    id           BigInt   @id @default(autoincrement())
-    email        String   @unique @db.VarChar(100)
-    passwordHash String   @map("password_hash") @db.VarChar(255)
-    role         String   @db.VarChar(30)
-    createdAt    DateTime @default(now()) @map("created_at")
-    updatedAt    DateTime @default(now()) @updatedAt @map("updated_at")
+  id           BigInt    @id @default(autoincrement())
+  email        String    @unique @db.VarChar(100)
+  passwordHash String    @map("password_hash") @db.VarChar(255)
+  role         UserRole
+  createdAt    DateTime? @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt    DateTime? @default(now()) @map("updated_at") @db.Timestamp(6)
 
-    doctor               Doctor?
-    createdMedicalRecords MedicalRecord[] @relation("CreatedBy")
-    updatedMedicalRecords MedicalRecord[] @relation("UpdatedBy")
+  doctor                Doctor?
+  medicalRecordsCreated MedicalRecord[] @relation("CreatedBy")
+  medicalRecordsUpdated MedicalRecord[] @relation("UpdatedBy")
 
-    @@map("users")
+  @@map("users")
 }
 
 model Patient {
-    id                  BigInt   @id @default(autoincrement())
-    medicalRecordNumber String   @unique @map("medical_record_number") @db.VarChar(20)
-    nik                 String   @unique @db.VarChar(16)
-    name                String   @db.VarChar(100)
-    gender              String   @db.VarChar(20)
-    dateOfBirth         DateTime @map("date_of_birth") @db.Date
-    phone               String?  @db.VarChar(20)
+    id                  BigInt      @id @default(autoincrement())
+    medicalRecordNumber String      @unique @map("medical_record_number") @db.VarChar(20)
+    nik                 String      @unique @db.VarChar(16)
+    name                String      @db.VarChar(100)
+    gender              GenderType
+    dateOfBirth         DateTime    @map("date_of_birth") @db.Date
+    phone               String?     @db.VarChar(20)
     address             String?
-    createdAt           DateTime @default(now()) @map("created_at")
-    updatedAt           DateTime @default(now()) @updatedAt @map("updated_at")
+    createdAt           DateTime?   @default(now()) @map("created_at") @db.Timestamp(6)
+    updatedAt           DateTime?   @default(now()) @map("updated_at") @db.Timestamp(6)
 
     registrations Registration[]
 
@@ -70,37 +109,35 @@ model Doctor {
     @@map("doctors")
 }
 
-/// CHECK: regist_status IN ('Menunggu', 'Check In', 'Pemeriksaan', 'Selesai')
 model Registration {
-    id               BigInt   @id @default(autoincrement())
-    patientId        BigInt   @map("patient_id")
-    doctorId         BigInt   @map("doctor_id")
-    polyId           BigInt   @map("poly_id")
-    visitDate        DateTime @map("visit_date") @db.Date
-    paymentType      String   @map("payment_type") @db.VarChar(50)
-    initialComplaint String?  @map("initial_complaint")
-    registStatus     String   @default("Menunggu") @map("regist_status") @db.VarChar(20)
-    createdAt        DateTime @default(now()) @map("created_at")
-    updatedAt        DateTime @default(now()) @updatedAt @map("updated_at")
+    id               BigInt      @id @default(autoincrement())
+    patientId        BigInt      @map("patient_id")
+    doctorId         BigInt      @map("doctor_id")
+    polyId           BigInt      @map("poly_id")
+    visitDate        DateTime    @map("visit_date") @db.Date
+    paymentType      PaymentType @map("payment_type")
+    initialComplaint String?     @map("initial_complaint") @db.Text
+    registStatus     RegistStatus @default(Menunggu) @map("regist_status")
+    createdAt        DateTime    @default(now()) @map("created_at")
+    updatedAt        DateTime    @default(now()) @updatedAt @map("updated_at")
 
-    patient       Patient        @relation(fields: [patientId], references: [id])
-    doctor        Doctor         @relation(fields: [doctorId], references: [id])
-    polyclinic    Polyclinic     @relation(fields: [polyId], references: [id])
-    patientQueue  PatientQueue?
+    patient       Patient       @relation(fields: [patientId], references: [id])
+    doctor        Doctor        @relation(fields: [doctorId], references: [id])
+    polyclinic    Polyclinic    @relation(fields: [polyId], references: [id])
+    queue         PatientQueue?
     medicalRecord MedicalRecord?
 
     @@map("registrations")
 }
 
-/// CHECK: queue_status IN ('Menunggu', 'Dipanggil', 'Selesai')
 model PatientQueue {
-    id             BigInt    @id @default(autoincrement())
-    registrationId BigInt    @unique @map("registration_id")
-    queueNumber    String    @map("queue_number") @db.VarChar(20)
-    queueStatus    String    @default("Menunggu") @map("queue_status") @db.VarChar(20)
-    calledAt       DateTime? @map("called_at")
-    createdAt      DateTime  @default(now()) @map("created_at")
-    updatedAt      DateTime  @default(now()) @updatedAt @map("updated_at")
+    id             BigInt      @id @default(autoincrement())
+    registrationId BigInt      @unique @map("registration_id")
+    queueNumber    String      @map("queue_number") @db.VarChar(20)
+    queueStatus    QueueStatus @default(Menunggu) @map("queue_status")
+    calledAt       DateTime?   @map("called_at")
+    createdAt      DateTime    @default(now()) @map("created_at")
+    updatedAt      DateTime    @default(now()) @updatedAt @map("updated_at")
 
     registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
 

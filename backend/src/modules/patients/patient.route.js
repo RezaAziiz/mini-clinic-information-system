@@ -2,6 +2,7 @@ import { Router } from 'express';
 import patientController from './patient.controller.js';
 import patientSchema from './patient.schema.js';
 import { authenticate, authorize } from '../../middlewares/auth.middleware.js';
+import { ROLE } from '../../common/constants/enums.js';
 
 const router = Router();
 
@@ -9,7 +10,7 @@ const router = Router();
 router.use(authenticate);
 
 // Berdasarkan Use Case, hanya Administrator dan Petugas Pendaftaran yang mengelola pasien
-const managePatientAccess = authorize('Administrator', 'Petugas Pendaftaran');
+const managePatientAccess = authorize(ROLE.ADMINISTRATOR, ROLE.PETUGAS_PENDAFTARAN);
 
 /**
  * @swagger

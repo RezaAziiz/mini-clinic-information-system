@@ -4,10 +4,11 @@ import { ApiError } from '../common/utils/ApiError.js';
 const errorHandler = (err, req, res, _next) => {
     // Jika error sudah dari ApiError, gunakan format
     if (err instanceof ApiError) {
+        const hasErrors = err.errors && Object.keys(err.errors).length > 0;
         return res.status(err.statusCode).json({
             success: false,
             message: err.message,
-            ...(err.errors && err.errors.length > 0 && { errors: err.errors })
+            ...(hasErrors && { errors: err.errors })
         });
     }
 

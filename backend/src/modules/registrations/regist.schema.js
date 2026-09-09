@@ -1,13 +1,18 @@
 import { ApiError } from '../../common/utils/ApiError.js';
-import { GENDER } from '../../common/constants/enums.js';
+import { PAYMENT_TYPE, REGIST_STATUS } from '../../common/constants/enums.js';
 
-const patientSchema = {
-    nik: { required: true, type: 'string', minLength: 16, maxLength: 16 },
-    name: { required: true, type: 'string', minLength: 3 },
-    gender: { required: true, type: 'string', enum: Object.values(GENDER) },
-    dateOfBirth: { required: true, type: 'string', format: 'date' },
-    phone: { required: false, type: 'string' },
-    address: { required: false, type: 'string' },
+const registCreateSchema = {
+    patientId: { required: true, type: 'number' },
+    doctorId: { required: true, type: 'number' },
+    polyId: { required: true, type: 'number' },
+    visitDate: { required: true, type: 'string', format: 'date' },
+    paymentType: { required: true, type: 'string', enum: Object.values(PAYMENT_TYPE) },
+    initialComplaint: { required: false, type: 'string' },
+};
+
+const registUpdateSchema = {
+    ...registCreateSchema,
+    registStatus: { required: false, type: 'string', enum: Object.values(REGIST_STATUS) },
 };
 
 const validate = (schema, data, isUpdate = false) => {
@@ -16,7 +21,6 @@ const validate = (schema, data, isUpdate = false) => {
     for (const [field, rules] of Object.entries(schema)) {
         const value = data[field];
 
-        // Jika update dan field tidak dikirim, skip validasi field ini
         if (isUpdate && value === undefined) {
             continue;
         }
@@ -33,14 +37,12 @@ const validate = (schema, data, isUpdate = false) => {
             continue;
         }
 
-        if (rules.minLength && value.length < rules.minLength) {
-            errors[field] = `${field} minimal ${rules.minLength} karakter`;
-            continue;
-        }
-
-        if (rules.maxLength && value.length > rules.maxLength) {
-            errors[field] = `${field} maksimal ${rules.maxLength} karakter`;
-            continue;
+        if (rules.type === 'number' && typeof value !== 'number') {
+            // Bisa jadi dikirim sebagai string number dari frontend
+            if (isNaN(Number(value))) {
+                errors[field] = `${field} harus berupa angka (ID)`;
+                continue;
+            }
         }
 
         if (rules.enum && !rules.enum.includes(value)) {
@@ -61,18 +63,29 @@ const validate = (schema, data, isUpdate = false) => {
 };
 
 const validateCreate = (req, res, next) => {
-    const errors = validate(patientSchema, req.body, false);
+    const errors = validate(registCreateSchema, req.body, false);
     if (Object.keys(errors).length > 0) {
         return next(ApiError.badRequest('Validation Error', errors));
     }
+    
+    // Parse ID dari string ke number jika perlu
+    if (req.body.patientId) req.body.patientId = Number(req.body.patientId);
+    if (req.body.doctorId) req.body.doctorId = Number(req.body.doctorId);
+    if (req.body.polyId) req.body.polyId = Number(req.body.polyId);
+
     next();
 };
 
 const validateUpdate = (req, res, next) => {
-    const errors = validate(patientSchema, req.body, true);
+    const errors = validate(registUpdateSchema, req.body, true);
     if (Object.keys(errors).length > 0) {
         return next(ApiError.badRequest('Validation Error', errors));
     }
+
+    if (req.body.patientId) req.body.patientId = Number(req.body.patientId);
+    if (req.body.doctorId) req.body.doctorId = Number(req.body.doctorId);
+    if (req.body.polyId) req.body.polyId = Number(req.body.polyId);
+
     next();
 };
 

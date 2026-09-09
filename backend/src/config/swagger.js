@@ -129,7 +129,9 @@ const options = {
                             example: {
                                 success: false,
                                 message: 'Validasi gagal',
-                                errors: ['email wajib diisi']
+                                errors: {
+                                    email: 'email wajib diisi'
+                                }
                             }
                         }
                     }

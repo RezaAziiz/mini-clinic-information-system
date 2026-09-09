@@ -1,3 +1,6 @@
+// Fix for "TypeError: Do not know how to serialize a BigInt" from Prisma
+BigInt.prototype.toJSON = function() { return this.toString() }
+
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -7,6 +10,7 @@ import { responseFormatter } from './middlewares/response.middleware.js';
 import errorHandler from './middlewares/error.middleware.js';
 import authRoutes from './modules/auth/auth.route.js';
 import patientRoutes from './modules/patients/patient.route.js';
+import registRoutes from './modules/registrations/regist.route.js';
 
 const app = express();
 
@@ -28,6 +32,7 @@ app.get('/health', (req, res) => {
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/patients', patientRoutes);
+app.use('/api/registrations', registRoutes);
 
 // Global error handler
 app.use(errorHandler);
