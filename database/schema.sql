@@ -1,13 +1,14 @@
+CREATE TYPE user_role AS ENUM ('Administrator', 'Dokter', 'Petugas Pendaftaran');
+CREATE TYPE gender_type AS ENUM ('L', 'P');
+CREATE TYPE payment_type AS ENUM ('Umum', 'BPJS', 'Asuransi Lainnya');
+CREATE TYPE regist_status AS ENUM ('Menunggu', 'Check In', 'Pemeriksaan', 'Selesai');
+CREATE TYPE queue_status AS ENUM ('Menunggu', 'Dipanggil', 'Selesai');
+
 CREATE TABLE users (
     id BIGSERIAL PRIMARY KEY,
     email VARCHAR(100) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
-    role VARCHAR(30) NOT NULL
-        CHECK (role IN (
-            'Administrator',
-            'Dokter',
-            'Petugas Pendaftaran'
-        )),
+    role user_role NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -17,7 +18,7 @@ CREATE TABLE patients (
     medical_record_number VARCHAR(20) NOT NULL UNIQUE,
     nik VARCHAR(16) NOT NULL UNIQUE,
     name VARCHAR(100) NOT NULL,
-    gender VARCHAR(20) NOT NULL,
+    gender gender_type NOT NULL,
     date_of_birth DATE NOT NULL,
     phone VARCHAR(20),
     address TEXT,
@@ -54,15 +55,9 @@ CREATE TABLE registrations (
     poly_id BIGINT NOT NULL
         REFERENCES polyclinics(id),
     visit_date DATE NOT NULL,
-    payment_type VARCHAR(50) NOT NULL,
+    payment_type payment_type NOT NULL,
     initial_complaint TEXT,
-    regist_status VARCHAR(20) NOT NULL DEFAULT 'Menunggu'
-        CHECK (regist_status IN (
-            'Menunggu',
-            'Check In',
-            'Pemeriksaan',
-            'Selesai'
-        )),
+    regist_status regist_status NOT NULL DEFAULT 'Menunggu',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -72,12 +67,7 @@ CREATE TABLE patient_queues (
     registration_id BIGINT NOT NULL UNIQUE
         REFERENCES registrations(id) ON DELETE CASCADE,
     queue_number VARCHAR(20) NOT NULL,
-    queue_status VARCHAR(20) NOT NULL DEFAULT 'Menunggu'
-        CHECK (queue_status IN (
-            'Menunggu',
-            'Dipanggil',
-            'Selesai'
-        )),
+    queue_status queue_status NOT NULL DEFAULT 'Menunggu',
     called_at TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

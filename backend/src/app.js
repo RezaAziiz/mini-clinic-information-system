@@ -12,6 +12,9 @@ import authRoutes from './modules/auth/auth.route.js';
 import patientRoutes from './modules/patients/patient.route.js';
 import registRoutes from './modules/registrations/regist.route.js';
 import queueRoutes from './modules/patient-queues/patient-queue.route.js';
+import medicalRecordRoutes from './modules/medical-records/medical-record.route.js';
+import prescriptionRoutes from './modules/prescriptions/prescription.route.js';
+import dashboardRoutes from './modules/dashboard/dashboard.route.js';
 
 const app = express();
 
@@ -38,6 +41,9 @@ app.use('/api/auth', authRoutes);
 app.use('/api/patients', patientRoutes);
 app.use('/api/registrations', registRoutes);
 app.use('/api/queues', queueRoutes);
+app.use('/api/medical-records', medicalRecordRoutes);
+app.use('/api/prescriptions', prescriptionRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 // Global error handler
 app.use(errorHandler);
