@@ -11,6 +11,12 @@ export const REGIST_STATUS = {
     SELESAI: 'Selesai'
 };
 
+export const QUEUE_STATUS = {
+    MENUNGGU: 'Menunggu',
+    DIPANGGIL: 'Dipanggil',
+    SELESAI: 'Selesai'
+};
+
 export const PAYMENT_TYPE = {
     UMUM: 'Umum',
     BPJS: 'BPJS',

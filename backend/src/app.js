@@ -11,16 +11,20 @@ import errorHandler from './middlewares/error.middleware.js';
 import authRoutes from './modules/auth/auth.route.js';
 import patientRoutes from './modules/patients/patient.route.js';
 import registRoutes from './modules/registrations/regist.route.js';
+import queueRoutes from './modules/patient-queues/patient-queue.route.js';
 
 const app = express();
 
-app.use(cors());
+// Middleware
 app.use(helmet());
+app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Inject standardized success response formatter
+// Response formatter middleware
 app.use(responseFormatter);
 
+// Swagger documentation
 if (process.env.NODE_ENV !== 'production') {
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 }
@@ -33,6 +37,7 @@ app.get('/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/patients', patientRoutes);
 app.use('/api/registrations', registRoutes);
+app.use('/api/queues', queueRoutes);
 
 // Global error handler
 app.use(errorHandler);
