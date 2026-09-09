@@ -9,8 +9,10 @@ const router = Router();
 // Semua rute pasien harus terautentikasi
 router.use(authenticate);
 
-// Berdasarkan Use Case, hanya Administrator dan Petugas Pendaftaran yang mengelola pasien
+// Hanya Administrator dan Petugas Pendaftaran yang bisa MENGELOLA (write) data pasien
 const managePatientAccess = authorize(ROLE.ADMINISTRATOR, ROLE.PETUGAS_PENDAFTARAN);
+// Dokter juga bisa MEMBACA data pasien (untuk keperluan rekam medis & riwayat pemeriksaan)
+const readPatientAccess   = authorize(ROLE.ADMINISTRATOR, ROLE.PETUGAS_PENDAFTARAN, ROLE.DOKTER);
 
 /**
  * @swagger
@@ -49,7 +51,7 @@ const managePatientAccess = authorize(ROLE.ADMINISTRATOR, ROLE.PETUGAS_PENDAFTAR
  *       403:
  *         description: Anda tidak memiliki akses ke resource ini
  */
-router.get('/', managePatientAccess, patientController.getPatients);
+router.get('/', readPatientAccess, patientController.getPatients);
 
 /**
  * @swagger
@@ -83,7 +85,7 @@ router.get('/', managePatientAccess, patientController.getPatients);
  *       404:
  *         description: Data tidak ditemukan
  */
-router.get('/:id', managePatientAccess, patientController.getPatientById);
+router.get('/:id', readPatientAccess, patientController.getPatientById);
 
 /**
  * @swagger

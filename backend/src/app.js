@@ -15,6 +15,8 @@ import queueRoutes from './modules/patient-queues/patient-queue.route.js';
 import medicalRecordRoutes from './modules/medical-records/medical-record.route.js';
 import prescriptionRoutes from './modules/prescriptions/prescription.route.js';
 import dashboardRoutes from './modules/dashboard/dashboard.route.js';
+import doctorRoutes from './modules/doctors/doctor.route.js';
+import polyclinicRoutes from './modules/polyclinics/polyclinic.route.js';
 
 const app = express();
 
@@ -44,6 +46,8 @@ app.use('/api/queues', queueRoutes);
 app.use('/api/medical-records', medicalRecordRoutes);
 app.use('/api/prescriptions', prescriptionRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/doctors', doctorRoutes);
+app.use('/api/polyclinics', polyclinicRoutes);
 
 // Global error handler
 app.use(errorHandler);

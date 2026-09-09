@@ -59,7 +59,9 @@ const findByPatientId = async (patientId) => {
                     polyclinic: true
                 }
             },
-            prescriptions: true // Relasi ke resep obat
+            prescriptions: {
+                include: { prescriptionItems: true }
+            }
         },
         orderBy: {
             examinedAt: 'desc'

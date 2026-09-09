@@ -26,7 +26,7 @@ router.use(authenticate);
  *       200:
  *         description: Data summary dashboard berhasil diambil
  */
-// Administrator dapat melihat semua dashboard, bisa juga ditambahkan role lain jika dibutuhkan (sesuai use case, utamanya Administrator)
-router.get('/', authorize(ROLE.ADMINISTRATOR), dashboardController.getSummary);
+// Dashboard bisa diakses oleh semua role (Administrator, Dokter, Petugas) sesuai Use Case
+router.get('/', authorize(ROLE.ADMINISTRATOR, ROLE.DOKTER, ROLE.PETUGAS_PENDAFTARAN), dashboardController.getSummary);
 
 export default router;

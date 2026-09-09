@@ -95,7 +95,7 @@ router.use(authenticate);
  */
 router.get(
     '/',
-    authorize(ROLE.PETUGAS_PENDAFTARAN, ROLE.DOKTER),
+    authorize(ROLE.ADMINISTRATOR, ROLE.PETUGAS_PENDAFTARAN, ROLE.DOKTER),
     registController.getRegistrations
 );
 

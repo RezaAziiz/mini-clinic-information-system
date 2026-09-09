@@ -1,7 +1,7 @@
 import prisma from '../../config/database.js';
 
 const findAll = async (filters = {}) => {
-    const { startDate, endDate, status, polyId } = filters;
+    const { startDate, endDate, status, polyId, doctorId } = filters;
     const where = {};
 
     if (startDate && endDate) {
@@ -23,9 +23,10 @@ const findAll = async (filters = {}) => {
 
     if (status) where.queueStatus = status;
 
-    if (polyId) {
+    if (polyId || doctorId) {
         where.registration = {
-            polyId: Number(polyId)
+            ...(polyId   && { polyId:   Number(polyId) }),
+            ...(doctorId && { doctorId: Number(doctorId) }),
         };
     }
 

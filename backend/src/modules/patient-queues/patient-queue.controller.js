@@ -6,7 +6,8 @@ const getQueues = async (req, res, next) => {
             startDate: req.query.startDate,
             endDate: req.query.endDate,
             status: req.query.status,
-            polyId: req.query.polyId
+            polyId: req.query.polyId,
+            doctorId: req.query.doctorId,
         };
 
         const queues = await queueService.getAllQueues(filters);
