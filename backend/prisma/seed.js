@@ -9,11 +9,9 @@ const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-    console.log('🌱 Seeding database...\n');
+    console.log('Seeding database...\n');
 
-    // ──────────────────────────────────────────────
     // 1. Users
-    // ──────────────────────────────────────────────
     const passwordHash = await bcrypt.hash('password123', 10);
 
     const admin = await prisma.user.create({
@@ -56,11 +54,9 @@ async function main() {
         },
     });
 
-    console.log(`✅ Created ${5} users`);
+    console.log(`Created ${5} users`);
 
-    // ──────────────────────────────────────────────
     // 2. Polyclinics
-    // ──────────────────────────────────────────────
     const poliUmum = await prisma.polyclinic.create({
         data: {
             name: 'Poli Umum',
@@ -82,11 +78,10 @@ async function main() {
         },
     });
 
-    console.log(`✅ Created ${3} polyclinics`);
+    console.log(`Created ${3} polyclinics`);
 
-    // ──────────────────────────────────────────────
+
     // 3. Doctors
-    // ──────────────────────────────────────────────
     const drSari = await prisma.doctor.create({
         data: {
             userId: dokterUser1.id,
@@ -117,11 +112,9 @@ async function main() {
         },
     });
 
-    console.log(`✅ Created ${3} doctors`);
+    console.log(`Created ${3} doctors`);
 
-    // ──────────────────────────────────────────────
     // 4. Patients
-    // ──────────────────────────────────────────────
     const patients = await Promise.all([
         prisma.patient.create({
             data: {
@@ -180,11 +173,9 @@ async function main() {
         }),
     ]);
 
-    console.log(`✅ Created ${patients.length} patients`);
+    console.log(`Created ${patients.length} patients`);
 
-    // ──────────────────────────────────────────────
     // 5. Registrations
-    // ──────────────────────────────────────────────
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -248,11 +239,9 @@ async function main() {
         },
     });
 
-    console.log(`✅ Created ${5} registrations`);
+    console.log(`Created ${5} registrations`);
 
-    // ──────────────────────────────────────────────
     // 6. Patient Queues
-    // ──────────────────────────────────────────────
     await Promise.all([
         prisma.patientQueue.create({
             data: {
@@ -293,11 +282,9 @@ async function main() {
         }),
     ]);
 
-    console.log(`✅ Created ${5} patient queues`);
+    console.log(`Created ${5} patient queues`);
 
-    // ──────────────────────────────────────────────
     // 7. Medical Record (untuk registrasi yang sudah selesai)
-    // ──────────────────────────────────────────────
     const medRecord1 = await prisma.medicalRecord.create({
         data: {
             registrationId: reg1.id,
@@ -315,11 +302,9 @@ async function main() {
         },
     });
 
-    console.log(`✅ Created ${1} medical record`);
+    console.log(`Created ${1} medical record`);
 
-    // ──────────────────────────────────────────────
     // 8. Prescriptions & Items
-    // ──────────────────────────────────────────────
     const prescription1 = await prisma.prescription.create({
         data: {
             medicalRecordId: medRecord1.id,
@@ -352,18 +337,16 @@ async function main() {
         },
     });
 
-    console.log(`✅ Created ${1} prescription with ${3} items`);
+    console.log(`Created ${1} prescription with ${3} items`);
 
-    console.log('\n🎉 Seeding selesai!\n');
-    console.log('📋 Akun login yang tersedia:');
-    console.log('──────────────────────────────────────');
+    console.log(' Seeding selesai!\n');
+    console.log(' Akun login yang tersedia:');
     console.log('Admin           : admin@klinik.com');
     console.log('Dokter 1        : dr.sari@klinik.com');
     console.log('Dokter 2        : dr.budi@klinik.com');
     console.log('Dokter 3        : dr.rina@klinik.com');
     console.log('Petugas         : petugas@klinik.com');
     console.log('Password (semua): password123');
-    console.log('──────────────────────────────────────');
 }
 
 main()
@@ -371,7 +354,7 @@ main()
         await prisma.$disconnect();
     })
     .catch(async (e) => {
-        console.error('❌ Seed error:', e);
+        console.error('Seed error:', e);
         await prisma.$disconnect();
         process.exit(1);
     });
