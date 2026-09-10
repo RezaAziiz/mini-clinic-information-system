@@ -1,6 +1,6 @@
 export const STATUS_STYLES = {
     'Menunggu':    'bg-yellow-50 text-yellow-700',
-    'Check In':    'bg-blue-50 text-blue-700',
+    'Check_In':    'bg-blue-50 text-blue-700',
     'Pemeriksaan': 'bg-purple-50 text-purple-700',
     'Selesai':     'bg-green-50 text-green-700',
 };
@@ -15,7 +15,7 @@ export const paymentLabel = (t) => (t === 'Asuransi_Lainnya' ? 'Asuransi Lainnya
 
 export const StatusBadge = ({ status }) => (
     <span className={`text-[10px] font-bold px-2.5 py-1 rounded-md ${STATUS_STYLES[status] || 'bg-slate-100 text-slate-600'}`}>
-        {status}
+        {status?.replace('_', ' ')}
     </span>
 );
 

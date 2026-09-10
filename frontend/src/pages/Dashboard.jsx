@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import api from '../services/api';
+import dashboardService from '../services/dashboard.service';
+import { registrationService } from "../services/registration.service";
+import queueService from '../services/queue.service';
+import doctorService from '../services/doctor.service';
+import { ROLE, REGIST_STATUS, QUEUE_STATUS } from '../utils/constants';
 import {
     Users, CalendarDays, ListOrdered, Clock, CheckCircle2,
     UserPlus, Building2, Stethoscope, X, ArrowRight, Loader2
@@ -10,10 +14,10 @@ import Button from '../components/common/Button';
 const todayISO = () => new Date().toISOString().split('T')[0];
 
 const STATUS_STYLES = {
-    'Menunggu':    'bg-amber-50 text-amber-700',
-    'Check In':    'bg-blue-50 text-blue-700',
-    'Pemeriksaan': 'bg-indigo-50 text-indigo-700',
-    'Selesai':     'bg-emerald-50 text-emerald-700',
+    [QUEUE_STATUS.MENUNGGU]:    'bg-amber-50 text-amber-700',
+    [REGIST_STATUS.CHECK_IN]:    'bg-blue-50 text-blue-700',
+    [REGIST_STATUS.PEMERIKSAAN]: 'bg-indigo-50 text-indigo-700',
+    [QUEUE_STATUS.SELESAI]:     'bg-emerald-50 text-emerald-700',
 };
 
 const StatusBadge = ({ status }) => (
@@ -122,7 +126,7 @@ const MetricCard = ({ title, value, loading, icon: Icon, subInfo, badge }) => (
 
 const Dashboard = () => {
     const { user } = useAuth();
-    const isDoctor = user?.role === 'Dokter';
+    const isDoctor = user?.role === ROLE.DOKTER;
 
     const [metrics, setMetrics] = useState({
         totalPasien: 0,
@@ -142,10 +146,10 @@ const Dashboard = () => {
         const fetchData = async () => {
             try {
                 const [resMetrics, resVisits, resDoctors, resQueues] = await Promise.all([
-                    api.get('/dashboard'),
-                    api.get('/registrations'),
-                    api.get('/doctors'),
-                    api.get('/queues', { params: { startDate: todayISO() } }),
+                    dashboardService.getSummary(),
+                    registrationService.getAll(),
+                    doctorService.getAll(),
+                    queueService.getAll({ startDate: todayISO() }),
                 ]);
 
                 if (resMetrics.success) setMetrics(resMetrics.data);
@@ -172,8 +176,8 @@ const Dashboard = () => {
             if (!map[polyId]) {
                 map[polyId] = { polyName, docName, waiting: 0, lastCalled: null };
             }
-            if (q.queueStatus === 'Menunggu')   map[polyId].waiting++;
-            if (q.queueStatus === 'Dipanggil')  map[polyId].lastCalled = q.queueNumber;
+            if (q.queueStatus === QUEUE_STATUS.MENUNGGU)   map[polyId].waiting++;
+            if (q.queueStatus === QUEUE_STATUS.DIPANGGIL)  map[polyId].lastCalled = q.queueNumber;
         });
         return Object.values(map);
     })();
@@ -190,11 +194,6 @@ const Dashboard = () => {
                         Pusat Operasional Klinik
                     </h2>
                 </div>
-                {!isDoctor && (
-                    <Button icon={UserPlus} className="px-6">
-                        Daftarkan Pasien Baru
-                    </Button>
-                )}
             </div>
 
             {/* Metrics */}

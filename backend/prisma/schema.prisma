@@ -89,6 +89,7 @@ model Polyclinic {
     updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
 
     registrations Registration[]
+    doctors       Doctor[]
 
     @@map("polyclinics")
 }
@@ -100,10 +101,12 @@ model Doctor {
     name           String   @db.VarChar(100)
     phone          String?  @db.VarChar(20)
     specialization String?  @db.VarChar(100)
+    polyId         BigInt?  @map("poly_id")
     createdAt      DateTime @default(now()) @map("created_at")
     updatedAt      DateTime @default(now()) @updatedAt @map("updated_at")
 
     user          User           @relation(fields: [userId], references: [id])
+    polyclinic    Polyclinic?    @relation(fields: [polyId], references: [id])
     registrations Registration[]
 
     @@map("doctors")

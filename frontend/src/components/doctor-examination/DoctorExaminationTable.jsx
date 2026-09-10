@@ -1,6 +1,7 @@
 import { Loader2, ClipboardList, User, Stethoscope, CheckCircle2 } from 'lucide-react';
 import { formatDate } from '../../utils/formatters';
 import { StatusBadge, PaymentBadge } from '../registrations/RegistrationBadges';
+import { REGIST_STATUS } from '../../utils/constants';
 
 const DoctorExaminationTable = ({
     displayed,
@@ -87,7 +88,7 @@ const DoctorExaminationTable = ({
                                     {/* Action */}
                                     <td className="px-5 py-4">
                                         <div className="flex items-center justify-center">
-                                            {(reg.registStatus === 'Check In' || reg.registStatus === 'Pemeriksaan') && (
+                                            {(reg.registStatus === REGIST_STATUS.CHECK_IN || reg.registStatus === REGIST_STATUS.PEMERIKSAAN) && (
                                                 <button
                                                     onClick={() => onOpenModal(reg)}
                                                     className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 transition-all shadow-sm shadow-blue-600/25 active:scale-[0.97]"

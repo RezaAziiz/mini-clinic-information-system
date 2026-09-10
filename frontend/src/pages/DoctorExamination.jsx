@@ -1,6 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
-import api from '../services/api';
 import toast from 'react-hot-toast';
+import doctorService from '../services/doctor.service';
+import { registrationService } from "../services/registration.service";
+import medicalRecordService from '../services/medical-record.service';
+import prescriptionService from '../services/prescription.service';
+import { REGIST_STATUS } from '../utils/constants';
 import { formatDate } from '../utils/formatters';
 import Backdrop from '../components/common/Backdrop';
 import { useAuth } from '../contexts/AuthContext';
@@ -9,7 +13,7 @@ import DoctorExaminationTable from '../components/doctor-examination/DoctorExami
 import ExaminationModal from '../components/doctor-examination/ExaminationModal';
 
 // Status pills shown in filter bar (excludes 'Menunggu' since doctor only cares about active ones)
-const FILTER_STATUSES = ['Check In', 'Pemeriksaan', 'Selesai'];
+const FILTER_STATUSES = [REGIST_STATUS.CHECK_IN, REGIST_STATUS.PEMERIKSAAN, REGIST_STATUS.SELESAI];
 
 // Prescription item factory 
 const emptyItem = () => ({
@@ -40,12 +44,12 @@ const DoctorExamination = () => {
     const [filterDate, setFilterDate] = useState('');
     const [filterStatus, setFilterStatus] = useState('');
 
-    // ── SOAP Modal ────────────────────────────────────────────────────────────
+    //  SOAP Modal 
     const [showModal, setShowModal] = useState(false);
     const [activeReg, setActiveReg] = useState(null);
     const [submitting, setSubmitting] = useState(false);
 
-    // ── SOAP form ─────────────────────────────────────────────────────────────
+    // SOAP form 
     const [form, setForm] = useState({
         subjective: '',
         bloodPressure: '',
@@ -68,7 +72,7 @@ const DoctorExamination = () => {
         const fetchProfile = async () => {
             setLoadingProfile(true);
             try {
-                const res = await api.get('/doctors/me');
+                const res = await doctorService.getMyProfile();
                 if (res.success) {
                     setMyDoctorId(res.data.id);
                     setMyDoctorName(res.data.name);
@@ -92,7 +96,7 @@ const DoctorExamination = () => {
         try {
             const params = { doctorId: myDoctorId };
             if (filterDate) params.startDate = filterDate;
-            const res = await api.get('/registrations', { params });
+            const res = await registrationService.getAll(params);
             if (res.success) setRegistrations(res.data);
         } catch {
             toast.error('Gagal memuat data registrasi');
@@ -196,14 +200,14 @@ const DoctorExamination = () => {
             if (form.medicalAction.trim()) mrPayload.medicalAction = form.medicalAction.trim();
 
             //  POST medical record
-            const mrRes = await api.post('/medical-records', mrPayload);
+            const mrRes = await medicalRecordService.create(mrPayload);
             const medRecord = mrRes.data;
 
             //  Optionally POST prescription
             if (showPresc) {
                 const validItems = prescItems.filter((it) => it.medicineName.trim());
                 if (validItems.length > 0) {
-                    await api.post('/prescriptions', {
+                    await prescriptionService.create({
                         medicalRecordId: Number(medRecord.id),
                         notes: prescNotes.trim() || undefined,
                         items: validItems.map((it) => ({
@@ -237,9 +241,9 @@ const DoctorExamination = () => {
     // Stats 
     const stats = {
         total: registrations.length,
-        checkIn: registrations.filter((r) => r.registStatus === 'Check In').length,
-        pemeriksaan: registrations.filter((r) => r.registStatus === 'Pemeriksaan').length,
-        selesai: registrations.filter((r) => r.registStatus === 'Selesai').length,
+        checkIn: registrations.filter((r) => r.registStatus === REGIST_STATUS.CHECK_IN).length,
+        pemeriksaan: registrations.filter((r) => r.registStatus === REGIST_STATUS.PEMERIKSAAN).length,
+        selesai: registrations.filter((r) => r.registStatus === REGIST_STATUS.SELESAI).length,
     };
 
     // Loading profile state 

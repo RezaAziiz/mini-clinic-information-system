@@ -14,6 +14,7 @@ import { STATUSES } from '../components/registrations/RegistrationBadges';
 import RegistrationTable from '../components/registrations/RegistrationTable';
 import RegistrationFormModal from '../components/registrations/RegistrationFormModal';
 import RegistrationDetailModal from '../components/registrations/RegistrationDetailModal';
+import { ROLE, REGIST_STATUS } from '../utils/constants';
 
 
 
@@ -24,44 +25,38 @@ const todayISO = () => new Date().toISOString().split('T')[0];
 const Registrations = () => {
     const { user } = useAuth();
 
-    // ── Data ──────────────────────────────────────────────────────────────
     const [registrations, setRegistrations] = useState([]);
     const [doctors, setDoctors] = useState([]);
     const [polyclinics, setPolyclinics] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // ── Filters ───────────────────────────────────────────────────────────
     const [filterDate, setFilterDate] = useState(todayISO());
     const [filterStatus, setFilterStatus] = useState('');
 
-    // ── Modal state ───────────────────────────────────────────────────────
     const [showFormModal, setShowFormModal] = useState(false);
     const [showDetailModal, setShowDetailModal] = useState(false);
     const [editingReg, setEditingReg] = useState(null);
     const [detailReg, setDetailReg] = useState(null);
     const [submitting, setSubmitting] = useState(false);
 
-    // ── Form ──────────────────────────────────────────────────────────────
     const [form, setForm] = useState({
-        patientId:        '',
-        patientName:      '',
-        doctorId:         '',
-        polyId:           '',
-        visitDate:        todayISO(),
-        paymentType:      'Umum',
+        patientId: '',
+        patientName: '',
+        doctorId: '',
+        polyId: '',
+        visitDate: todayISO(),
+        paymentType: 'Umum',
         initialComplaint: '',
-        registStatus:     '',
+        registStatus: '',
     });
     const [formErrors, setFormErrors] = useState({});
 
-    // ── Patient search ────────────────────────────────────────────────────
     const [patientSearch, setPatientSearch] = useState('');
     const [patientResults, setPatientResults] = useState([]);
     const [searchingPatient, setSearchingPatient] = useState(false);
     const [showPatientDropdown, setShowPatientDropdown] = useState(false);
     const patientSearchRef = useRef(null);
 
-    // ── Fetch helpers ─────────────────────────────────────────────────────
     const fetchRegistrations = useCallback(async () => {
         setLoading(true);
         try {
@@ -84,7 +79,7 @@ const Registrations = () => {
                 referenceService.getDoctors(),
                 referenceService.getPolyclinics(),
             ]);
-            if (drRes.success)   setDoctors(drRes.data);
+            if (drRes.success) setDoctors(drRes.data);
             if (polyRes.success) setPolyclinics(polyRes.data);
         } catch {
             // non-critical
@@ -92,9 +87,8 @@ const Registrations = () => {
     }, []);
 
     useEffect(() => { fetchRegistrations(); }, [fetchRegistrations]);
-    useEffect(() => { fetchSupportData(); },    [fetchSupportData]);
+    useEffect(() => { fetchSupportData(); }, [fetchSupportData]);
 
-    // ── Patient search debounce ───────────────────────────────────────────
     useEffect(() => {
         if (!patientSearch || patientSearch.length < 2) {
             setPatientResults([]);
@@ -132,7 +126,6 @@ const Registrations = () => {
         return () => document.removeEventListener('mousedown', handler);
     }, []);
 
-    // ── Form helpers ──────────────────────────────────────────────────────
     const resetForm = () => {
         setForm({
             patientId: '', patientName: '', doctorId: '', polyId: '',
@@ -153,14 +146,14 @@ const Registrations = () => {
     const openEditModal = (reg) => {
         setEditingReg(reg);
         setForm({
-            patientId:        String(reg.patient?.id || reg.patientId || ''),
-            patientName:      reg.patient?.name || '',
-            doctorId:         String(reg.doctor?.id || reg.doctorId || ''),
-            polyId:           String(reg.polyclinic?.id || reg.polyId || ''),
-            visitDate:        reg.visitDate ? reg.visitDate.split('T')[0] : todayISO(),
-            paymentType:      reg.paymentType || 'Umum',
+            patientId: String(reg.patient?.id || reg.patientId || ''),
+            patientName: reg.patient?.name || '',
+            doctorId: String(reg.doctor?.id || reg.doctorId || ''),
+            polyId: String(reg.polyclinic?.id || reg.polyId || ''),
+            visitDate: reg.visitDate ? reg.visitDate.split('T')[0] : todayISO(),
+            paymentType: reg.paymentType || 'Umum',
             initialComplaint: reg.initialComplaint || '',
-            registStatus:     reg.registStatus || '',
+            registStatus: reg.registStatus || '',
         });
         setPatientSearch(reg.patient?.name || '');
         setFormErrors({});
@@ -182,8 +175,8 @@ const Registrations = () => {
     const validateForm = () => {
         const errors = {};
         if (!form.patientId) errors.patientId = 'Pasien wajib dipilih dari hasil pencarian';
-        if (!form.doctorId)  errors.doctorId  = 'Dokter wajib dipilih';
-        if (!form.polyId)    errors.polyId    = 'Poliklinik wajib dipilih';
+        if (!form.doctorId) errors.doctorId = 'Dokter wajib dipilih';
+        if (!form.polyId) errors.polyId = 'Poliklinik wajib dipilih';
         if (!form.visitDate) errors.visitDate = 'Tanggal kunjungan wajib diisi';
         if (!form.paymentType) errors.paymentType = 'Jenis pembayaran wajib dipilih';
         setFormErrors(errors);
@@ -196,11 +189,11 @@ const Registrations = () => {
         setSubmitting(true);
 
         const payload = {
-            patientId:        Number(form.patientId),
-            doctorId:         Number(form.doctorId),
-            polyId:           Number(form.polyId),
-            visitDate:        form.visitDate,
-            paymentType:      form.paymentType,
+            patientId: Number(form.patientId),
+            doctorId: Number(form.doctorId),
+            polyId: Number(form.polyId),
+            visitDate: form.visitDate,
+            paymentType: form.paymentType,
             initialComplaint: form.initialComplaint || undefined,
         };
 
@@ -235,7 +228,7 @@ const Registrations = () => {
     // Quick check-in from table row
     const handleCheckIn = async (reg) => {
         try {
-            await registrationService.update(reg.id, { registStatus: 'Check In' });
+            await registrationService.update(reg.id, { registStatus: REGIST_STATUS.CHECK_IN });
             toast.success(`${reg.patient?.name} berhasil Check In`);
             fetchRegistrations();
         } catch (error) {
@@ -243,9 +236,9 @@ const Registrations = () => {
         }
     };
 
-    // ── Render ────────────────────────────────────────────────────────────
+
     // Role guard — only Petugas Pendaftaran (hooks must all be called before this)
-    if (user && user.role !== 'Petugas Pendaftaran') {
+    if (user && user.role !== ROLE.PETUGAS_PENDAFTARAN) {
         return <Navigate to="/" replace />;
     }
 
@@ -303,11 +296,10 @@ const Registrations = () => {
                     <div className="flex flex-wrap gap-1.5">
                         <button
                             onClick={() => setFilterStatus('')}
-                            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                                !filterStatus
-                                    ? 'bg-primary-600 text-white shadow-sm'
-                                    : 'bg-slate-50 text-slate-500 hover:bg-slate-100 border border-slate-200'
-                            }`}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${!filterStatus
+                                ? 'bg-primary-600 text-white shadow-sm'
+                                : 'bg-slate-50 text-slate-500 hover:bg-slate-100 border border-slate-200'
+                                }`}
                         >
                             Semua
                         </button>
@@ -315,11 +307,10 @@ const Registrations = () => {
                             <button
                                 key={s}
                                 onClick={() => setFilterStatus(filterStatus === s ? '' : s)}
-                                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                                    filterStatus === s
-                                        ? 'bg-primary-600 text-white shadow-sm'
-                                        : 'bg-slate-50 text-slate-500 hover:bg-slate-100 border border-slate-200'
-                                }`}
+                                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${filterStatus === s
+                                    ? 'bg-primary-600 text-white shadow-sm'
+                                    : 'bg-slate-50 text-slate-500 hover:bg-slate-100 border border-slate-200'
+                                    }`}
                             >
                                 {s}
                             </button>
@@ -329,7 +320,7 @@ const Registrations = () => {
             </div>
 
             {/* Table */}
-            <RegistrationTable 
+            <RegistrationTable
                 registrations={registrations}
                 loading={loading}
                 onDetail={openDetailModal}
@@ -337,8 +328,7 @@ const Registrations = () => {
                 onCheckIn={handleCheckIn}
             />
 
-            {/* ====== FORM MODAL (Create / Edit) ====== */}
-            <RegistrationFormModal 
+            <RegistrationFormModal
                 show={showFormModal}
                 onClose={() => setShowFormModal(false)}
                 onSubmit={handleSubmit}
@@ -360,7 +350,7 @@ const Registrations = () => {
             />
 
             {/* ====== DETAIL MODAL ====== */}
-            <RegistrationDetailModal 
+            <RegistrationDetailModal
                 show={showDetailModal}
                 onClose={() => { setShowDetailModal(false); setDetailReg(null); }}
                 detailReg={detailReg}

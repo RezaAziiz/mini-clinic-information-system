@@ -3,16 +3,18 @@ import { NavLink } from 'react-router-dom';
 import { Building2, LayoutDashboard, Users, LogOut, ClipboardList, ListOrdered, Stethoscope, ScrollText } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
+import { ROLE } from '../../utils/constants';
+
 const Sidebar = () => {
     const { logout, user } = useAuth();
 
     const menuItems = [
-        { path: '/', icon: LayoutDashboard, label: 'Dashboard', roles: ['Administrator', 'Dokter', 'Petugas Pendaftaran'] },
-        { path: '/patients', icon: Users, label: 'Patient Management', roles: ['Administrator', 'Petugas Pendaftaran'] },
-        { path: '/registrations', icon: ClipboardList, label: 'Visit Registration', roles: ['Petugas Pendaftaran'] },
-        { path: '/queues', icon: ListOrdered, label: 'Queue Management', roles: ['Petugas Pendaftaran', 'Dokter'] },
-        { path: '/examination', icon: Stethoscope, label: 'Doctor Examination', roles: ['Dokter'] },
-        { path: '/medical-history', icon: ScrollText, label: 'Medical History', roles: ['Dokter'] },
+        { path: '/', icon: LayoutDashboard, label: 'Dashboard', roles: [ROLE.ADMINISTRATOR, ROLE.DOKTER, ROLE.PETUGAS_PENDAFTARAN] },
+        { path: '/patients', icon: Users, label: 'Patient Management', roles: [ROLE.ADMINISTRATOR, ROLE.PETUGAS_PENDAFTARAN] },
+        { path: '/registrations', icon: ClipboardList, label: 'Visit Registration', roles: [ROLE.PETUGAS_PENDAFTARAN] },
+        { path: '/queues', icon: ListOrdered, label: 'Queue Management', roles: [ROLE.PETUGAS_PENDAFTARAN, ROLE.DOKTER] },
+        { path: '/examination', icon: Stethoscope, label: 'Doctor Examination', roles: [ROLE.DOKTER] },
+        { path: '/medical-history', icon: ScrollText, label: 'Medical History', roles: [ROLE.DOKTER] },
     ];
 
     const filteredMenu = menuItems.filter(item => !item.roles || item.roles.includes(user?.role));

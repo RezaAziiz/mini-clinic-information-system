@@ -34,6 +34,7 @@ router.get('/', async (req, res, next) => {
                 doctorCode: true,
                 name: true,
                 specialization: true,
+                polyId: true,
                 phone: true,
             },
             orderBy: { name: 'asc' },

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import api from '../services/api';
 import toast from 'react-hot-toast';
+import { patientService } from '../services/patient.service';
+import medicalRecordService from '../services/medical-record.service';
 import { formatDate, formatDateTime, calculateAge, genderLabel } from '../utils/formatters';
 import {
     Search, X, ChevronDown, ChevronUp, Loader2,
@@ -11,18 +12,18 @@ import {
 import PatientSearchCard from '../components/medical-history/PatientSearchCard';
 import MedicalRecordAccordion from '../components/medical-history/MedicalRecordAccordion';
 
-// ─── Main component ───────────────────────────────────────────────────────────
+// Main component 
 
 const MedicalHistory = () => {
     // Patient search
-    const [patientSearch,       setPatientSearch]       = useState('');
-    const [patientResults,      setPatientResults]      = useState([]);
-    const [searchingPatient,    setSearchingPatient]    = useState(false);
+    const [patientSearch, setPatientSearch] = useState('');
+    const [patientResults, setPatientResults] = useState([]);
+    const [searchingPatient, setSearchingPatient] = useState(false);
     const [showPatientDropdown, setShowPatientDropdown] = useState(false);
-    const [selectedPatient,     setSelectedPatient]     = useState(null);
+    const [selectedPatient, setSelectedPatient] = useState(null);
 
     // Medical records
-    const [records,        setRecords]        = useState([]);
+    const [records, setRecords] = useState([]);
     const [loadingRecords, setLoadingRecords] = useState(false);
 
     // Accordion
@@ -31,7 +32,7 @@ const MedicalHistory = () => {
     // Refs
     const patientSearchRef = useRef(null);
 
-    // ── Click-outside: close dropdown ─────────────────────────────────────────
+    // Click-outside: close dropdown 
     useEffect(() => {
         const handler = (e) => {
             if (patientSearchRef.current && !patientSearchRef.current.contains(e.target)) {
@@ -42,7 +43,7 @@ const MedicalHistory = () => {
         return () => document.removeEventListener('mousedown', handler);
     }, []);
 
-    // ── Patient search debounce (400 ms) ──────────────────────────────────────
+    // Patient search debounce (400 ms) 
     useEffect(() => {
         // Use a short delay for the clear case, full debounce for search
         const delay = patientSearch.length < 2 ? 0 : 400;
@@ -57,9 +58,7 @@ const MedicalHistory = () => {
 
             setSearchingPatient(true);
             try {
-                const res = await api.get('/patients', {
-                    params: { search: patientSearch, limit: 6 },
-                });
+                const res = await patientService.getAll({ search: patientSearch, limit: 6 });
                 if (res.success) {
                     setPatientResults(res.data.data || []);
                     setShowPatientDropdown(true);
@@ -74,7 +73,7 @@ const MedicalHistory = () => {
         return () => clearTimeout(timer);
     }, [patientSearch]);
 
-    // ── Fetch medical records when patient selected ────────────────────────────
+    // Fetch medical records when patient selected 
     useEffect(() => {
         if (!selectedPatient) return;
 
@@ -82,7 +81,7 @@ const MedicalHistory = () => {
             setLoadingRecords(true);
             setExpandedId(null);
             try {
-                const res = await api.get(`/medical-records/${selectedPatient.id}`);
+                const res = await medicalRecordService.getByPatientId(selectedPatient.id);
                 if (res.success) {
                     setRecords(res.data || []);
                 }
@@ -96,7 +95,7 @@ const MedicalHistory = () => {
         fetchRecords();
     }, [selectedPatient]);
 
-    // ── Handlers ──────────────────────────────────────────────────────────────
+    // Handlers 
 
     const selectPatient = (patient) => {
         setSelectedPatient(patient);
@@ -116,11 +115,10 @@ const MedicalHistory = () => {
         setExpandedId((prev) => (prev === id ? null : id));
     };
 
-    // ─── Render ───────────────────────────────────────────────────────────────
+    // Render 
     return (
         <div className="space-y-6">
 
-            {/* ── Page Header ── */}
             <div>
                 <h2 className="text-2xl font-extrabold text-slate-800 tracking-tight">
                     Riwayat Pemeriksaan Pasien
@@ -130,8 +128,6 @@ const MedicalHistory = () => {
                 </p>
             </div>
 
-            {/* ── Patient Search Card ── */}
-            {/* ── Patient Search Card ── */}
             <PatientSearchCard
                 patientSearchRef={patientSearchRef}
                 patientSearch={patientSearch}
@@ -145,7 +141,6 @@ const MedicalHistory = () => {
                 clearPatient={clearPatient}
             />
 
-            {/* ── Medical Records Section ── */}
             <MedicalRecordAccordion
                 selectedPatient={selectedPatient}
                 loadingRecords={loadingRecords}

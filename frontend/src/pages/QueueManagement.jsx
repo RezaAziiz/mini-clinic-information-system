@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import api from '../services/api';
+
 import toast from 'react-hot-toast';
 import { formatDate } from '../utils/formatters';
 import Backdrop from '../components/common/Backdrop';
@@ -7,49 +7,54 @@ import { useAuth } from '../contexts/AuthContext';
 import { Plus, X, Filter, Calendar, Loader2, Stethoscope } from 'lucide-react';
 import QueueTable from '../components/queue/QueueTable';
 import QueueCreateModal from '../components/queue/QueueCreateModal';
+import queueService from '../services/queue.service';
+import doctorService from '../services/doctor.service';
+import { registrationService } from "../services/registration.service";
+import { referenceService } from "../services/reference.service";
+import { ROLE, QUEUE_STATUS, REGIST_STATUS } from '../utils/constants';
 
 const todayISO = () => new Date().toISOString().split('T')[0];
 
-const STATUSES = ['Menunggu', 'Dipanggil', 'Selesai'];
+const STATUSES = [QUEUE_STATUS.MENUNGGU, QUEUE_STATUS.DIPANGGIL, QUEUE_STATUS.SELESAI];
 
-// ─── Main component ───────────────────────────────────────────────────────────
+//  Main component 
 
 const QueueManagement = () => {
     const { user } = useAuth();
-    const isPetugas = user?.role === 'Petugas Pendaftaran';
+    const isPetugas = user?.role === ROLE.PETUGAS_PENDAFTARAN;
 
-    // ── Data ──────────────────────────────────────────────────────────────────
+    // Data 
     const [queues, setQueues] = useState([]);
     const [polyclinics, setPolyclinics] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // ── Doctor profile (only relevant when role = Dokter) ─────────────────────
+    // Doctor profile (only relevant when role = Dokter) 
     const [myDoctorId, setMyDoctorId] = useState(null);     // Doctor record ID
     const [myDoctorName, setMyDoctorName] = useState('');
     const [loadingDoctorProfile, setLoadingDoctorProfile] = useState(!isPetugas);
 
-    // ── Filters ───────────────────────────────────────────────────────────────
+    // Filters
     const [filterDate, setFilterDate] = useState(todayISO());
     const [filterStatus, setFilterStatus] = useState('');
     const [filterPolyId, setFilterPolyId] = useState('');
 
-    // ── Create modal ──────────────────────────────────────────────────────────
+    // Create modal 
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [checkInRegs, setCheckInRegs] = useState([]);
     const [loadingRegs, setLoadingRegs] = useState(false);
     const [selectedRegId, setSelectedRegId] = useState('');
     const [submitting, setSubmitting] = useState(false);
 
-    // ── Action loading map (queueId → bool) ───────────────────────────────────
+    // Action loading map (queueId → bool) 
     const [actionLoading, setActionLoading] = useState({});
 
-    // ── Fetch doctor profile (for Dokter role) ────────────────────────────────
+    // Fetch doctor profile (for Dokter role) 
     useEffect(() => {
         if (isPetugas) return;
         const fetchMyProfile = async () => {
             setLoadingDoctorProfile(true);
             try {
-                const res = await api.get('/doctors/me');
+                const res = await doctorService.getMyProfile();
                 if (res.success) {
                     setMyDoctorId(String(res.data.id));
                     setMyDoctorName(res.data.name);
@@ -63,7 +68,7 @@ const QueueManagement = () => {
         fetchMyProfile();
     }, [isPetugas]);
 
-    // ── Fetch queues ──────────────────────────────────────────────────────────
+    // Fetch queues 
     const fetchQueues = useCallback(async () => {
         // Dokter: wait until we know their doctorId before fetching
         if (!isPetugas && myDoctorId === null) return;
@@ -71,13 +76,13 @@ const QueueManagement = () => {
         setLoading(true);
         try {
             const params = {};
-            if (filterDate)   params.startDate = filterDate;
-            if (filterStatus) params.status    = filterStatus;
+            if (filterDate) params.startDate = filterDate;
+            if (filterStatus) params.status = filterStatus;
             // Petugas: optional poly filter. Dokter: always filter by own doctorId
             if (isPetugas && filterPolyId) params.polyId = filterPolyId;
-            if (!isPetugas && myDoctorId)  params.doctorId = myDoctorId;
+            if (!isPetugas && myDoctorId) params.doctorId = myDoctorId;
 
-            const res = await api.get('/queues', { params });
+            const res = await queueService.getAll(params);
             if (res.success) setQueues(res.data);
         } catch {
             toast.error('Gagal memuat data antrean');
@@ -89,25 +94,23 @@ const QueueManagement = () => {
     const fetchPolyclinics = useCallback(async () => {
         if (!isPetugas) return; // dokter tidak butuh filter poli
         try {
-            const res = await api.get('/polyclinics');
+            const res = await referenceService.getPolyclinics();
             if (res.success) setPolyclinics(res.data);
         } catch {
             // non-critical
         }
     }, [isPetugas]);
 
-    useEffect(() => { fetchQueues(); },      [fetchQueues]);
+    useEffect(() => { fetchQueues(); }, [fetchQueues]);
     useEffect(() => { fetchPolyclinics(); }, [fetchPolyclinics]);
 
-    // ── Fetch "Check In" registrations for create modal ───────────────────────
+    // Fetch "Check In" registrations for create modal 
     const openCreateModal = async () => {
         setShowCreateModal(true);
         setSelectedRegId('');
         setLoadingRegs(true);
         try {
-            const res = await api.get('/registrations', {
-                params: { status: 'Check In', startDate: filterDate || todayISO() },
-            });
+            const res = await registrationService.getAll({ status: REGIST_STATUS.CHECK_IN, startDate: filterDate || todayISO() });
             if (res.success) setCheckInRegs(res.data);
         } catch {
             toast.error('Gagal memuat daftar pendaftaran');
@@ -123,7 +126,7 @@ const QueueManagement = () => {
         }
         setSubmitting(true);
         try {
-            await api.post('/queues', { registrationId: Number(selectedRegId) });
+            await queueService.create({ registrationId: Number(selectedRegId) });
             toast.success('Nomor antrean berhasil digenerate');
             setShowCreateModal(false);
             fetchQueues();
@@ -134,11 +137,11 @@ const QueueManagement = () => {
         }
     };
 
-    // ── Call queue (Menunggu → Dipanggil) ─────────────────────────────────────
+    // Call queue (Menunggu → Dipanggil) 
     const handleCall = async (queue) => {
         setActionLoading((p) => ({ ...p, [queue.id]: true }));
         try {
-            await api.put(`/queues/${queue.id}/call`);
+            await queueService.callQueue(queue.id);
             toast.success(`Antrean ${queue.queueNumber} berhasil dipanggil`);
             fetchQueues();
         } catch (error) {
@@ -148,11 +151,11 @@ const QueueManagement = () => {
         }
     };
 
-    // ── Finish queue (Dipanggil → Selesai) ────────────────────────────────────
+    // Finish queue (Dipanggil → Selesai) 
     const handleFinish = async (queue) => {
         setActionLoading((p) => ({ ...p, [queue.id]: true }));
         try {
-            await api.put(`/queues/${queue.id}/status`, { queueStatus: 'Selesai' });
+            await queueService.updateStatus(queue.id, QUEUE_STATUS.SELESAI);
             toast.success(`Antrean ${queue.queueNumber} selesai`);
             fetchQueues();
         } catch (error) {
@@ -162,15 +165,15 @@ const QueueManagement = () => {
         }
     };
 
-    // ── Stats from queues list ─────────────────────────────────────────────────
+    // Stats from queues list 
     const stats = {
-        total:     queues.length,
-        menunggu:  queues.filter((q) => q.queueStatus === 'Menunggu').length,
-        dipanggil: queues.filter((q) => q.queueStatus === 'Dipanggil').length,
-        selesai:   queues.filter((q) => q.queueStatus === 'Selesai').length,
+        total: queues.length,
+        menunggu: queues.filter((q) => q.queueStatus === QUEUE_STATUS.MENUNGGU).length,
+        dipanggil: queues.filter((q) => q.queueStatus === QUEUE_STATUS.DIPANGGIL).length,
+        selesai: queues.filter((q) => q.queueStatus === QUEUE_STATUS.SELESAI).length,
     };
 
-    // ─── Render ───────────────────────────────────────────────────────────────
+    //  Render 
 
     // Show loading state while fetching doctor profile
     if (loadingDoctorProfile) {
@@ -185,7 +188,6 @@ const QueueManagement = () => {
     return (
         <div className="space-y-6">
 
-            {/* ── Page Header ── */}
             <div className="flex items-center justify-between">
                 <div>
                     <h2 className="text-2xl font-extrabold text-slate-800 tracking-tight">
@@ -212,10 +214,10 @@ const QueueManagement = () => {
             {/* ── Stats strip ── */}
             <div className="grid grid-cols-4 gap-4">
                 {[
-                    { label: 'Total',     value: stats.total,     color: 'text-slate-700',  bg: 'bg-white' },
-                    { label: 'Menunggu',  value: stats.menunggu,  color: 'text-yellow-600', bg: 'bg-yellow-50' },
-                    { label: 'Dipanggil', value: stats.dipanggil, color: 'text-blue-600',   bg: 'bg-blue-50' },
-                    { label: 'Selesai',   value: stats.selesai,   color: 'text-green-600',  bg: 'bg-green-50' },
+                    { label: 'Total', value: stats.total, color: 'text-slate-700', bg: 'bg-white' },
+                    { label: 'Menunggu', value: stats.menunggu, color: 'text-yellow-600', bg: 'bg-yellow-50' },
+                    { label: 'Dipanggil', value: stats.dipanggil, color: 'text-blue-600', bg: 'bg-blue-50' },
+                    { label: 'Selesai', value: stats.selesai, color: 'text-green-600', bg: 'bg-green-50' },
                 ].map((s) => (
                     <div key={s.label} className={`${s.bg} rounded-2xl border border-slate-100 shadow-sm p-4 flex items-center gap-4`}>
                         <div>
@@ -254,11 +256,10 @@ const QueueManagement = () => {
                     <div className="flex flex-wrap gap-1.5">
                         <button
                             onClick={() => setFilterStatus('')}
-                            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                                !filterStatus
-                                    ? 'bg-primary-600 text-white shadow-sm'
-                                    : 'bg-slate-50 text-slate-500 hover:bg-slate-100 border border-slate-200'
-                            }`}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${!filterStatus
+                                ? 'bg-primary-600 text-white shadow-sm'
+                                : 'bg-slate-50 text-slate-500 hover:bg-slate-100 border border-slate-200'
+                                }`}
                         >
                             Semua
                         </button>
@@ -266,11 +267,10 @@ const QueueManagement = () => {
                             <button
                                 key={s}
                                 onClick={() => setFilterStatus(filterStatus === s ? '' : s)}
-                                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                                    filterStatus === s
-                                        ? 'bg-primary-600 text-white shadow-sm'
-                                        : 'bg-slate-50 text-slate-500 hover:bg-slate-100 border border-slate-200'
-                                }`}
+                                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${filterStatus === s
+                                    ? 'bg-primary-600 text-white shadow-sm'
+                                    : 'bg-slate-50 text-slate-500 hover:bg-slate-100 border border-slate-200'
+                                    }`}
                             >
                                 {s}
                             </button>
@@ -309,8 +309,6 @@ const QueueManagement = () => {
                 handleCall={handleCall}
                 handleFinish={handleFinish}
             />
-
-            {/* ====== CREATE QUEUE MODAL (Petugas only) ====== */}
             <QueueCreateModal
                 show={showCreateModal}
                 onClose={() => setShowCreateModal(false)}

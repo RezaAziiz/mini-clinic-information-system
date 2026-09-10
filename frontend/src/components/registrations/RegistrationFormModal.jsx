@@ -131,8 +131,10 @@ const RegistrationFormModal = ({
                                 }`}
                             >
                                 <option value="">Pilih Dokter</option>
-                                {doctors.map((d) => (
-                                    <option key={d.id} value={d.id}>{d.name}</option>
+                                {doctors
+                                    .filter(d => !form.polyId || String(d.polyId) === String(form.polyId))
+                                    .map((d) => (
+                                        <option key={d.id} value={d.id}>{d.name}</option>
                                 ))}
                             </select>
                             {formErrors.doctorId && (
@@ -212,7 +214,7 @@ const RegistrationFormModal = ({
                                 Status Kunjungan
                             </label>
                             <div className="flex gap-2">
-                                {['Menunggu', 'Check In'].map((s) => (
+                                {['Menunggu', 'Check_In'].map((s) => (
                                     <button
                                         key={s}
                                         type="button"
@@ -225,7 +227,7 @@ const RegistrationFormModal = ({
                                                 : 'bg-slate-50 border-slate-200 text-slate-500 hover:border-slate-300'
                                         }`}
                                     >
-                                        {s}
+                                        {s.replace('_', ' ')}
                                     </button>
                                 ))}
                             </div>

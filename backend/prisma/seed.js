@@ -50,7 +50,7 @@ async function main() {
         data: {
             email: 'petugas@klinik.com',
             passwordHash,
-            role: 'Petugas Pendaftaran',
+            role: 'Petugas_Pendaftaran',
         },
     });
 
@@ -89,6 +89,7 @@ async function main() {
             name: 'dr. Sari Dewi, Sp.PD',
             phone: '081234567890',
             specialization: 'Penyakit Dalam',
+            polyId: poliUmum.id,
         },
     });
 
@@ -99,6 +100,7 @@ async function main() {
             name: 'drg. Budi Santoso',
             phone: '081234567891',
             specialization: 'Dokter Gigi',
+            polyId: poliGigi.id,
         },
     });
 
@@ -109,6 +111,7 @@ async function main() {
             name: 'dr. Rina Kartika, Sp.A',
             phone: '081234567892',
             specialization: 'Dokter Anak',
+            polyId: poliAnak.id,
         },
     });
 
@@ -211,7 +214,7 @@ async function main() {
             visitDate: today,
             paymentType: 'BPJS',
             initialComplaint: 'Kontrol tekanan darah tinggi',
-            registStatus: 'Check In',
+            registStatus: 'Check_In',
         },
     });
 
