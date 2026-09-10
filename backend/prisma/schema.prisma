@@ -124,7 +124,7 @@ model Registration {
     createdAt        DateTime    @default(now()) @map("created_at")
     updatedAt        DateTime    @default(now()) @updatedAt @map("updated_at")
 
-    patient       Patient       @relation(fields: [patientId], references: [id])
+    patient       Patient       @relation(fields: [patientId], references: [id], onDelete: Cascade)
     doctor        Doctor        @relation(fields: [doctorId], references: [id])
     polyclinic    Polyclinic    @relation(fields: [polyId], references: [id])
     queue         PatientQueue?
