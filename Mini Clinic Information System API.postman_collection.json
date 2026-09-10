@@ -1,0 +1,2903 @@
+{
+  "info": {
+    "_postman_id": "f3617cb1-913c-427e-a33f-4376f96b50a4",
+    "name": "Mini Clinic Information System API",
+    "description": "REST API for Mini Clinic Information System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "40180399",
+    "_collection_link": "https://go.postman.co/collection/40180399-f3617cb1-913c-427e-a33f-4376f96b50a4?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "api",
+      "item": [
+        {
+          "name": "registrations",
+          "item": [
+            {
+              "name": "{id}",
+              "item": [
+                {
+                  "name": "Mendapatkan detail pendaftaran berdasarkan ID",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/registrations/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "registrations",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "5708"
+                        }
+                      ]
+                    },
+                    "description": "Mengambil detail spesifik dari sebuah pendaftaran"
+                  },
+                  "response": [
+                    {
+                      "name": "Berhasil mengambil data pendaftaran",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/registrations/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "registrations",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "5708"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    },
+                    {
+                      "name": "Data tidak ditemukan",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/registrations/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "registrations",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "5708"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                },
+                {
+                  "name": "Mengubah data atau status pendaftaran",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"patientId\": 1,\n  \"doctorId\": 1,\n  \"polyId\": 1,\n  \"visitDate\": \"2026-09-10\",\n  \"paymentType\": \"Umum\",\n  \"initialComplaint\": \"Sakit perut bagian bawah\",\n  \"registStatus\": \"Selesai\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/registrations/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "registrations",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "5708"
+                        }
+                      ]
+                    },
+                    "description": "Mengubah informasi pendaftaran atau status pendaftaran. **Petugas Pendaftaran** dapat mengubah data kunjungan dan check-in pasien. **Dokter** hanya dapat mengubah status menjadi Pemeriksaan dan Selesai."
+                  },
+                  "response": [
+                    {
+                      "name": "Berhasil mengubah data",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"patientId\": 1,\n  \"doctorId\": 1,\n  \"polyId\": 1,\n  \"visitDate\": \"2026-09-10\",\n  \"paymentType\": \"Umum\",\n  \"initialComplaint\": \"Sakit perut bagian bawah\",\n  \"registStatus\": \"Selesai\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/registrations/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "registrations",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "5708"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    },
+                    {
+                      "name": "Validasi input gagal",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"patientId\": 1,\n  \"doctorId\": 1,\n  \"polyId\": 1,\n  \"visitDate\": \"2026-09-10\",\n  \"paymentType\": \"Umum\",\n  \"initialComplaint\": \"Sakit perut bagian bawah\",\n  \"registStatus\": \"Selesai\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/registrations/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "registrations",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "5708"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    },
+                    {
+                      "name": "Data pendaftaran tidak ditemukan",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"patientId\": 1,\n  \"doctorId\": 1,\n  \"polyId\": 1,\n  \"visitDate\": \"2026-09-10\",\n  \"paymentType\": \"Umum\",\n  \"initialComplaint\": \"Sakit perut bagian bawah\",\n  \"registStatus\": \"Selesai\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/registrations/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "registrations",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "5708"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Mendapatkan daftar pendaftaran",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{bearerToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/registrations?startDate=1983-01-17&endDate=1983-01-17&status=Check In&doctorId=5708",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "registrations"
+                  ],
+                  "query": [
+                    {
+                      "key": "startDate",
+                      "value": "1983-01-17",
+                      "description": "Filter tanggal awal (YYYY-MM-DD)"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "1983-01-17",
+                      "description": "Filter tanggal akhir (YYYY-MM-DD)"
+                    },
+                    {
+                      "key": "status",
+                      "value": "Check In",
+                      "description": "Filter status pendaftaran"
+                    },
+                    {
+                      "key": "doctorId",
+                      "value": "5708",
+                      "description": "Filter berdasarkan ID dokter"
+                    }
+                  ]
+                },
+                "description": "Mengambil seluruh daftar pendaftaran kunjungan (Bisa diakses oleh Petugas Pendaftaran dan Dokter)"
+              },
+              "response": [
+                {
+                  "name": "Berhasil mengambil data",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/registrations?startDate=1983-01-17&endDate=1983-01-17&status=Check In&doctorId=5708",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "registrations"
+                      ],
+                      "query": [
+                        {
+                          "description": "Filter tanggal awal (YYYY-MM-DD)",
+                          "key": "startDate",
+                          "value": "1983-01-17"
+                        },
+                        {
+                          "description": "Filter tanggal akhir (YYYY-MM-DD)",
+                          "key": "endDate",
+                          "value": "1983-01-17"
+                        },
+                        {
+                          "description": "Filter status pendaftaran",
+                          "key": "status",
+                          "value": "Check In"
+                        },
+                        {
+                          "description": "Filter berdasarkan ID dokter",
+                          "key": "doctorId",
+                          "value": "5708"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": ""
+                }
+              ]
+            },
+            {
+              "name": "Mendaftarkan kunjungan pasien baru",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{bearerToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"patientId\": 1,\n  \"doctorId\": 1,\n  \"polyId\": 1,\n  \"visitDate\": \"2026-09-10\",\n  \"paymentType\": \"Umum\",\n  \"initialComplaint\": \"Sakit perut bagian bawah\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/registrations",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "registrations"
+                  ]
+                },
+                "description": "Mendaftarkan jadwal kunjungan pasien ke poli dan dokter tertentu. Hanya dapat diakses oleh **Petugas Pendaftaran**."
+              },
+              "response": [
+                {
+                  "name": "Pendaftaran berhasil dibuat",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"patientId\": 1,\n  \"doctorId\": 1,\n  \"polyId\": 1,\n  \"visitDate\": \"2026-09-10\",\n  \"paymentType\": \"Umum\",\n  \"initialComplaint\": \"Sakit perut bagian bawah\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/registrations",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "registrations"
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": ""
+                },
+                {
+                  "name": "Validasi input gagal",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"patientId\": 1,\n  \"doctorId\": 1,\n  \"polyId\": 1,\n  \"visitDate\": \"2026-09-10\",\n  \"paymentType\": \"Umum\",\n  \"initialComplaint\": \"Sakit perut bagian bawah\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/registrations",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "registrations"
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "prescriptions",
+          "item": [
+            {
+              "name": "{id}",
+              "item": [
+                {
+                  "name": "Mendapatkan detail resep obat berdasarkan ID",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/prescriptions/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "prescriptions",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "5708"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "Data resep obat berhasil diambil",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/prescriptions/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "prescriptions",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "5708"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Membuat resep obat baru",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{bearerToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"medicalRecordId\": 1,\n  \"items\": [\n    {\n      \"medicineName\": \"Paracetamol\",\n      \"dosage\": \"500mg\",\n      \"frequency\": \"3x1\",\n      \"quantity\": 10,\n      \"instructions\": \"Sesudah makan\"\n    },\n    {\n      \"medicineName\": \"Paracetamol\",\n      \"dosage\": \"500mg\",\n      \"frequency\": \"3x1\",\n      \"quantity\": 10,\n      \"instructions\": \"Sesudah makan\"\n    }\n  ],\n  \"notes\": \"Habiskan obat antibiotik\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/prescriptions",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "prescriptions"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Resep obat berhasil dibuat",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"medicalRecordId\": 1,\n  \"items\": [\n    {\n      \"medicineName\": \"Paracetamol\",\n      \"dosage\": \"500mg\",\n      \"frequency\": \"3x1\",\n      \"quantity\": 10,\n      \"instructions\": \"Sesudah makan\"\n    },\n    {\n      \"medicineName\": \"Paracetamol\",\n      \"dosage\": \"500mg\",\n      \"frequency\": \"3x1\",\n      \"quantity\": 10,\n      \"instructions\": \"Sesudah makan\"\n    }\n  ],\n  \"notes\": \"Habiskan obat antibiotik\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/prescriptions",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "prescriptions"
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "patients",
+          "item": [
+            {
+              "name": "{id}",
+              "item": [
+                {
+                  "name": "Get patient details by ID",
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/patients/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "patients",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "string",
+                          "description": "ID Pasien"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "Detail pasien",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/patients/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "patients",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string",
+                              "description": "ID Pasien"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"success\": true,\n  \"message\": \"Operasi berhasil\",\n  \"data\": {\n    \"id\": \"string\",\n    \"medicalRecordNumber\": \"string\",\n    \"nik\": \"string\",\n    \"name\": \"string\",\n    \"gender\": \"P\",\n    \"dateOfBirth\": \"2006-10-26T21:28:26.262Z\",\n    \"phone\": \"string\",\n    \"address\": \"string\",\n    \"createdAt\": \"1998-09-25T08:35:36.239Z\",\n    \"updatedAt\": \"1966-11-22T22:19:15.832Z\"\n  }\n}"
+                    },
+                    {
+                      "name": "Tidak terautentikasi (Token tidak valid atau tidak ditemukan)",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/patients/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "patients",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string",
+                              "description": "ID Pasien"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"success\": false,\n  \"message\": \"Token tidak ditemukan\",\n  \"data\": null\n}"
+                    },
+                    {
+                      "name": "Anda tidak memiliki akses ke resource ini",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/patients/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "patients",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string",
+                              "description": "ID Pasien"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    },
+                    {
+                      "name": "Data tidak ditemukan",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/patients/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "patients",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string",
+                              "description": "ID Pasien"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                },
+                {
+                  "name": "Update patient data",
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"nik\": \"3201010101010001\",\n  \"name\": \"Budi Santoso\",\n  \"gender\": \"L\",\n  \"dateOfBirth\": \"1990-01-01\",\n  \"phone\": \"08123456789\",\n  \"address\": \"Jl. Merdeka No. 1\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/patients/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "patients",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "string",
+                          "description": "ID Pasien"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "Pasien berhasil diupdate",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"nik\": \"3201010101010001\",\n  \"name\": \"Budi Santoso\",\n  \"gender\": \"L\",\n  \"dateOfBirth\": \"1990-01-01\",\n  \"phone\": \"08123456789\",\n  \"address\": \"Jl. Merdeka No. 1\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/patients/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "patients",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string",
+                              "description": "ID Pasien"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"success\": true,\n  \"message\": \"Operasi berhasil\",\n  \"data\": {\n    \"id\": \"string\",\n    \"medicalRecordNumber\": \"string\",\n    \"nik\": \"string\",\n    \"name\": \"string\",\n    \"gender\": \"P\",\n    \"dateOfBirth\": \"2006-10-26T21:28:26.262Z\",\n    \"phone\": \"string\",\n    \"address\": \"string\",\n    \"createdAt\": \"1998-09-25T08:35:36.239Z\",\n    \"updatedAt\": \"1966-11-22T22:19:15.832Z\"\n  }\n}"
+                    },
+                    {
+                      "name": "Validasi input gagal",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"nik\": \"3201010101010001\",\n  \"name\": \"Budi Santoso\",\n  \"gender\": \"L\",\n  \"dateOfBirth\": \"1990-01-01\",\n  \"phone\": \"08123456789\",\n  \"address\": \"Jl. Merdeka No. 1\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/patients/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "patients",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string",
+                              "description": "ID Pasien"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"success\": false,\n  \"message\": \"Validasi gagal\",\n  \"errors\": {\n    \"email\": \"email wajib diisi\"\n  }\n}"
+                    },
+                    {
+                      "name": "Tidak terautentikasi (Token tidak valid atau tidak ditemukan)",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"nik\": \"3201010101010001\",\n  \"name\": \"Budi Santoso\",\n  \"gender\": \"L\",\n  \"dateOfBirth\": \"1990-01-01\",\n  \"phone\": \"08123456789\",\n  \"address\": \"Jl. Merdeka No. 1\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/patients/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "patients",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string",
+                              "description": "ID Pasien"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"success\": false,\n  \"message\": \"Token tidak ditemukan\",\n  \"data\": null\n}"
+                    },
+                    {
+                      "name": "Anda tidak memiliki akses ke resource ini",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"nik\": \"3201010101010001\",\n  \"name\": \"Budi Santoso\",\n  \"gender\": \"L\",\n  \"dateOfBirth\": \"1990-01-01\",\n  \"phone\": \"08123456789\",\n  \"address\": \"Jl. Merdeka No. 1\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/patients/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "patients",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string",
+                              "description": "ID Pasien"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    },
+                    {
+                      "name": "Data tidak ditemukan",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"nik\": \"3201010101010001\",\n  \"name\": \"Budi Santoso\",\n  \"gender\": \"L\",\n  \"dateOfBirth\": \"1990-01-01\",\n  \"phone\": \"08123456789\",\n  \"address\": \"Jl. Merdeka No. 1\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/patients/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "patients",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string",
+                              "description": "ID Pasien"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                },
+                {
+                  "name": "Delete a patient",
+                  "request": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/patients/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "patients",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "string",
+                          "description": "ID Pasien"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "Pasien berhasil dihapus",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/patients/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "patients",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string",
+                              "description": "ID Pasien"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"success\": true,\n  \"message\": \"Operasi berhasil\"\n}"
+                    },
+                    {
+                      "name": "Pasien tidak bisa dihapus karena punya relasi",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/patients/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "patients",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string",
+                              "description": "ID Pasien"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    },
+                    {
+                      "name": "Tidak terautentikasi (Token tidak valid atau tidak ditemukan)",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/patients/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "patients",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string",
+                              "description": "ID Pasien"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"success\": false,\n  \"message\": \"Token tidak ditemukan\",\n  \"data\": null\n}"
+                    },
+                    {
+                      "name": "Anda tidak memiliki akses ke resource ini",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/patients/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "patients",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string",
+                              "description": "ID Pasien"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    },
+                    {
+                      "name": "Data tidak ditemukan",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/patients/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "patients",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "string",
+                              "description": "ID Pasien"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Get all patients with pagination and search",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/patients?page=1&limit=10&search=string",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "patients"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "description": "Nomor halaman"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10",
+                      "description": "Jumlah data per halaman"
+                    },
+                    {
+                      "key": "search",
+                      "value": "string",
+                      "description": "Keyword pencarian (NIK/Nama/No RM)"
+                    }
+                  ]
+                },
+                "description": "Mengambil daftar pasien. Bisa dicari berdasarkan NIK, Nama, atau No Rekam Medis"
+              },
+              "response": [
+                {
+                  "name": "Berhasil mengambil data",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/patients?page=1&limit=10&search=string",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "patients"
+                      ],
+                      "query": [
+                        {
+                          "description": "Nomor halaman",
+                          "key": "page",
+                          "value": "1"
+                        },
+                        {
+                          "description": "Jumlah data per halaman",
+                          "key": "limit",
+                          "value": "10"
+                        },
+                        {
+                          "description": "Keyword pencarian (NIK/Nama/No RM)",
+                          "key": "search",
+                          "value": "string"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n  \"success\": true,\n  \"message\": \"Operasi berhasil\",\n  \"data\": {\n    \"data\": [\n      \"\",\n      \"\"\n    ],\n    \"meta\": {\n      \"page\": 1,\n      \"limit\": 10,\n      \"total\": 50,\n      \"totalPages\": 5\n    }\n  }\n}"
+                },
+                {
+                  "name": "Tidak terautentikasi (Token tidak valid atau tidak ditemukan)",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/patients?page=1&limit=10&search=string",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "patients"
+                      ],
+                      "query": [
+                        {
+                          "description": "Nomor halaman",
+                          "key": "page",
+                          "value": "1"
+                        },
+                        {
+                          "description": "Jumlah data per halaman",
+                          "key": "limit",
+                          "value": "10"
+                        },
+                        {
+                          "description": "Keyword pencarian (NIK/Nama/No RM)",
+                          "key": "search",
+                          "value": "string"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n  \"success\": false,\n  \"message\": \"Token tidak ditemukan\",\n  \"data\": null\n}"
+                },
+                {
+                  "name": "Anda tidak memiliki akses ke resource ini",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/patients?page=1&limit=10&search=string",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "patients"
+                      ],
+                      "query": [
+                        {
+                          "description": "Nomor halaman",
+                          "key": "page",
+                          "value": "1"
+                        },
+                        {
+                          "description": "Jumlah data per halaman",
+                          "key": "limit",
+                          "value": "10"
+                        },
+                        {
+                          "description": "Keyword pencarian (NIK/Nama/No RM)",
+                          "key": "search",
+                          "value": "string"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": ""
+                }
+              ]
+            },
+            {
+              "name": "Add new patient",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nik\": \"3201010101010001\",\n  \"name\": \"Budi Santoso\",\n  \"gender\": \"L\",\n  \"dateOfBirth\": \"1990-01-01\",\n  \"phone\": \"08123456789\",\n  \"address\": \"Jl. Merdeka No. 1\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/patients",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "patients"
+                  ]
+                },
+                "description": "Menambahkan data pasien baru. Nomor Rekam Medis dibuat otomatis."
+              },
+              "response": [
+                {
+                  "name": "Pasien berhasil ditambahkan",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"nik\": \"3201010101010001\",\n  \"name\": \"Budi Santoso\",\n  \"gender\": \"L\",\n  \"dateOfBirth\": \"1990-01-01\",\n  \"phone\": \"08123456789\",\n  \"address\": \"Jl. Merdeka No. 1\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/patients",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "patients"
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n  \"success\": true,\n  \"message\": \"Operasi berhasil\",\n  \"data\": {\n    \"id\": \"string\",\n    \"medicalRecordNumber\": \"string\",\n    \"nik\": \"string\",\n    \"name\": \"string\",\n    \"gender\": \"P\",\n    \"dateOfBirth\": \"2006-10-26T21:28:26.262Z\",\n    \"phone\": \"string\",\n    \"address\": \"string\",\n    \"createdAt\": \"1998-09-25T08:35:36.239Z\",\n    \"updatedAt\": \"1966-11-22T22:19:15.832Z\"\n  }\n}"
+                },
+                {
+                  "name": "Validasi input gagal",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"nik\": \"3201010101010001\",\n  \"name\": \"Budi Santoso\",\n  \"gender\": \"L\",\n  \"dateOfBirth\": \"1990-01-01\",\n  \"phone\": \"08123456789\",\n  \"address\": \"Jl. Merdeka No. 1\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/patients",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "patients"
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n  \"success\": false,\n  \"message\": \"Validasi gagal\",\n  \"errors\": {\n    \"email\": \"email wajib diisi\"\n  }\n}"
+                },
+                {
+                  "name": "Tidak terautentikasi (Token tidak valid atau tidak ditemukan)",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"nik\": \"3201010101010001\",\n  \"name\": \"Budi Santoso\",\n  \"gender\": \"L\",\n  \"dateOfBirth\": \"1990-01-01\",\n  \"phone\": \"08123456789\",\n  \"address\": \"Jl. Merdeka No. 1\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/patients",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "patients"
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n  \"success\": false,\n  \"message\": \"Token tidak ditemukan\",\n  \"data\": null\n}"
+                },
+                {
+                  "name": "Anda tidak memiliki akses ke resource ini",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"nik\": \"3201010101010001\",\n  \"name\": \"Budi Santoso\",\n  \"gender\": \"L\",\n  \"dateOfBirth\": \"1990-01-01\",\n  \"phone\": \"08123456789\",\n  \"address\": \"Jl. Merdeka No. 1\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/patients",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "patients"
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "queues",
+          "item": [
+            {
+              "name": "{id}",
+              "item": [
+                {
+                  "name": "call",
+                  "item": [
+                    {
+                      "name": "Memanggil pasien berdasarkan antrean",
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "PUT",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/queues/:id/call",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "queues",
+                            ":id",
+                            "call"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "5708"
+                            }
+                          ]
+                        },
+                        "description": "Mengubah status antrean menjadi Dipanggil dan mencatat waktu panggilan"
+                      },
+                      "response": [
+                        {
+                          "name": "Pasien berhasil dipanggil",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/queues/:id/call",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "queues",
+                                ":id",
+                                "call"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "5708"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "status",
+                  "item": [
+                    {
+                      "name": "Mengubah status antrean",
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"queueStatus\": \"Selesai\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/queues/:id/status",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "queues",
+                            ":id",
+                            "status"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "5708"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "Status antrean berhasil diupdate",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"queueStatus\": \"Selesai\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/queues/:id/status",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "queues",
+                                ":id",
+                                "status"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "5708"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Mendapatkan daftar antrean",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{bearerToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/queues?startDate=1983-01-17&endDate=1983-01-17&status=Dipanggil&polyId=5708",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "queues"
+                  ],
+                  "query": [
+                    {
+                      "key": "startDate",
+                      "value": "1983-01-17"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "1983-01-17"
+                    },
+                    {
+                      "key": "status",
+                      "value": "Dipanggil"
+                    },
+                    {
+                      "key": "polyId",
+                      "value": "5708"
+                    }
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Daftar antrean berhasil diambil",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/queues?startDate=1983-01-17&endDate=1983-01-17&status=Dipanggil&polyId=5708",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "queues"
+                      ],
+                      "query": [
+                        {
+                          "key": "startDate",
+                          "value": "1983-01-17"
+                        },
+                        {
+                          "key": "endDate",
+                          "value": "1983-01-17"
+                        },
+                        {
+                          "key": "status",
+                          "value": "Dipanggil"
+                        },
+                        {
+                          "key": "polyId",
+                          "value": "5708"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": ""
+                }
+              ]
+            },
+            {
+              "name": "Membuat antrean baru untuk pendaftaran tertentu",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{bearerToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"registrationId\": 1\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/queues",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "queues"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Antrean berhasil dibuat",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"registrationId\": 1\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/queues",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "queues"
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "medical-records",
+          "item": [
+            {
+              "name": "{patientId}",
+              "item": [
+                {
+                  "name": "Mendapatkan riwayat rekam medis berdasarkan ID Pasien",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/medical-records/:patientId",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "medical-records",
+                        ":patientId"
+                      ],
+                      "variable": [
+                        {
+                          "key": "patientId",
+                          "value": "5708"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "Riwayat pemeriksaan berhasil diambil",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/medical-records/:patientId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "medical-records",
+                            ":patientId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "patientId",
+                              "value": "5708"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Membuat rekam medis baru (SOAP) dan menyelesaikan kunjungan",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{bearerToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"registrationId\": 1,\n  \"subjective\": \"Pasien mengeluh pusing dan mual sejak 3 hari yang lalu.\",\n  \"assessment\": \"Observasi Febris, Susp. Dengue Fever\",\n  \"plan\": \"Cek darah rutin, Paracetamol 3x500mg, Istirahat cukup\",\n  \"bloodPressure\": \"120/80\",\n  \"temperature\": 38.5,\n  \"weight\": 65.5,\n  \"height\": 170,\n  \"medicalAction\": \"Pemberian infus RL 500ml\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/medical-records",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "medical-records"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Rekam Medis berhasil disimpan",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"registrationId\": 1,\n  \"subjective\": \"Pasien mengeluh pusing dan mual sejak 3 hari yang lalu.\",\n  \"assessment\": \"Observasi Febris, Susp. Dengue Fever\",\n  \"plan\": \"Cek darah rutin, Paracetamol 3x500mg, Istirahat cukup\",\n  \"bloodPressure\": \"120/80\",\n  \"temperature\": 38.5,\n  \"weight\": 65.5,\n  \"height\": 170,\n  \"medicalAction\": \"Pemberian infus RL 500ml\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/medical-records",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "medical-records"
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "dashboard",
+          "item": [
+            {
+              "name": "Mendapatkan summary statistik harian",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{bearerToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/dashboard",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "dashboard"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Data summary dashboard berhasil diambil",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/dashboard",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "dashboard"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "body": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "auth",
+          "item": [
+            {
+              "name": "login",
+              "item": [
+                {
+                  "name": "Login user",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"email\": \"admin@klinik.com\",\n  \"password\": \"password123\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/auth/login",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "auth",
+                        "login"
+                      ]
+                    },
+                    "description": "Autentikasi user dengan email dan password, mengembalikan JWT token"
+                  },
+                  "response": [
+                    {
+                      "name": "Login berhasil",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"email\": \"admin@klinik.com\",\n  \"password\": \"password123\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/auth/login",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "auth",
+                            "login"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"success\": true,\n  \"message\": \"Operasi berhasil\",\n  \"data\": {\n    \"accessToken\": \"string\",\n    \"user\": {\n      \"id\": \"string\",\n      \"email\": \"Rcz@ZHIrhjbZuzlBaMQyrKlWVhP.lv\",\n      \"role\": \"string\",\n      \"createdAt\": \"1991-05-19T21:47:28.268Z\",\n      \"updatedAt\": \"1949-08-16T13:19:54.116Z\"\n    }\n  }\n}"
+                    },
+                    {
+                      "name": "Validasi input gagal",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"email\": \"admin@klinik.com\",\n  \"password\": \"password123\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/auth/login",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "auth",
+                            "login"
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"success\": false,\n  \"message\": \"Validasi gagal\",\n  \"errors\": {\n    \"email\": \"email wajib diisi\"\n  }\n}"
+                    },
+                    {
+                      "name": "Tidak terautentikasi (Token tidak valid atau tidak ditemukan)",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"email\": \"admin@klinik.com\",\n  \"password\": \"password123\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/auth/login",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "auth",
+                            "login"
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"success\": false,\n  \"message\": \"Token tidak ditemukan\",\n  \"data\": null\n}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "profile",
+              "item": [
+                {
+                  "name": "Get current user profile",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/auth/profile",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "auth",
+                        "profile"
+                      ]
+                    },
+                    "description": "Mengambil profil user yang sedang login berdasarkan JWT token"
+                  },
+                  "response": [
+                    {
+                      "name": "Profil berhasil diambil",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/auth/profile",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "auth",
+                            "profile"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"success\": true,\n  \"message\": \"Operasi berhasil\",\n  \"data\": {\n    \"id\": \"string\",\n    \"email\": \"Ilro@wYiENrwHJLMKVCJKgHaxkXDNiCq.bprb\",\n    \"role\": \"string\",\n    \"createdAt\": \"1991-08-19T11:48:12.526Z\",\n    \"updatedAt\": \"1987-05-22T13:42:49.177Z\"\n  }\n}"
+                    },
+                    {
+                      "name": "Tidak terautentikasi (Token tidak valid atau tidak ditemukan)",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/auth/profile",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "auth",
+                            "profile"
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"success\": false,\n  \"message\": \"Token tidak ditemukan\",\n  \"data\": null\n}"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    }
+  ]
+}
